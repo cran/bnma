@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -13,7 +12,7 @@
 
 <meta name="author" content="Michael Seo and Christopher Schmid" />
 
-<meta name="date" content="2019-12-04" />
+<meta name="date" content="2020-04-20" />
 
 <title>Bayesian network meta analysis</title>
 
@@ -21,67 +20,41 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 
 </style>
 <script>
@@ -108,189 +81,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#header {
-text-align: center;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 
 
@@ -304,516 +95,620 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Bayesian network meta analysis</h1>
 <h4 class="author">Michael Seo and Christopher Schmid</h4>
-<h4 class="date">2019-12-04</h4>
+<h4 class="date">2020-04-20</h4>
 
 
 
 <p>We describe how to run Bayesian network meta analysis using this package. First we’ll need to load the package.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">#install.packages(&quot;bnma&quot;)</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="co">#or devtools::install_github(&quot;MikeJSeo/bnma&quot;)</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(bnma)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&quot;bnma&quot;)</span>
+<span class="co">#or devtools::install_github(&quot;MikeJSeo/bnma&quot;)</span>
+<span class="kw">library</span>(bnma)</code></pre></div>
 <div id="preprocessing" class="section level2">
 <h2>Preprocessing</h2>
 <p>It is essential to specify the input data in a correct format. We have chosen to use arm-level data with following input variable names: Outcomes, N or SE, Study, and Treat. Outcomes is the trial results. N is the number of respondents used for binary or multinomial model. SE is the standard error used for normal model. Study is the study indicator for the meta analysis. Lastly, Treat is the treatment indicator for each arm. We use a dataset <code>parkinsons</code> for illustration.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">parkinsons</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; $Outcomes</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt;  [1] -1.22 -1.53 -0.70 -2.40 -0.30 -2.60 -1.20 -0.24 -0.59 -0.73 -0.18 -2.20</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [13] -2.50 -1.80 -2.10</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; $SE</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  [1] 0.504 0.439 0.282 0.258 0.505 0.510 0.478 0.265 0.354 0.335 0.442 0.197</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; [13] 0.190 0.200 0.250</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; $Treat</span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt;  [1] &quot;Placebo&quot;       &quot;Ropinirole&quot;    &quot;Placebo&quot;       &quot;Pramipexole&quot;  </span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt;  [5] &quot;Placebo&quot;       &quot;Pramipexole&quot;   &quot;Bromocriptine&quot; &quot;Ropinirole&quot;   </span></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;  [9] &quot;Bromocriptine&quot; &quot;Ropinirole&quot;    &quot;Bromocriptine&quot; &quot;Bromocriptine&quot;</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; [13] &quot;Cabergoline&quot;   &quot;Bromocriptine&quot; &quot;Cabergoline&quot;  </span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; $Study</span></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt;  [1] 1 1 2 2 3 3 3 4 4 5 5 6 6 7 7</span></a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; $Treat.order</span></a>
-<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; [1] &quot;Placebo&quot;       &quot;Pramipexole&quot;   &quot;Ropinirole&quot;    &quot;Bromocriptine&quot;</span></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; [5] &quot;Cabergoline&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">parkinsons
+<span class="co">#&gt; $Outcomes</span>
+<span class="co">#&gt;  [1] -1.22 -1.53 -0.70 -2.40 -0.30 -2.60 -1.20 -0.24 -0.59 -0.73 -0.18 -2.20</span>
+<span class="co">#&gt; [13] -2.50 -1.80 -2.10</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $SE</span>
+<span class="co">#&gt;  [1] 0.504 0.439 0.282 0.258 0.505 0.510 0.478 0.265 0.354 0.335 0.442 0.197</span>
+<span class="co">#&gt; [13] 0.190 0.200 0.250</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat</span>
+<span class="co">#&gt;  [1] &quot;Placebo&quot;       &quot;Ropinirole&quot;    &quot;Placebo&quot;       &quot;Pramipexole&quot;  </span>
+<span class="co">#&gt;  [5] &quot;Placebo&quot;       &quot;Pramipexole&quot;   &quot;Bromocriptine&quot; &quot;Ropinirole&quot;   </span>
+<span class="co">#&gt;  [9] &quot;Bromocriptine&quot; &quot;Ropinirole&quot;    &quot;Bromocriptine&quot; &quot;Bromocriptine&quot;</span>
+<span class="co">#&gt; [13] &quot;Cabergoline&quot;   &quot;Bromocriptine&quot; &quot;Cabergoline&quot;  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Study</span>
+<span class="co">#&gt;  [1] 1 1 2 2 3 3 3 4 4 5 5 6 6 7 7</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat.order</span>
+<span class="co">#&gt; [1] &quot;Placebo&quot;       &quot;Pramipexole&quot;   &quot;Ropinirole&quot;    &quot;Bromocriptine&quot;</span>
+<span class="co">#&gt; [5] &quot;Cabergoline&quot;</span></code></pre></div>
 <p>In order to run network meta analysis in JAGS, we need to relabel study names into to a numeric sequence, i.e. 1 to total number of studies, and relabel the treatment into a numeric sequence according to treatment order specified. If treatment order is not specified, default is to use alphabetical order. In the example below, we set placebo as the baseline treatment followed by Pramipexole, Ropinirole, Bromocriptine, and Cabergoline as the treatment order.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(parkinsons, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">SE =</span> SE, <span class="dt">response =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">Treat.order =</span> Treat.order))</a>
-<a class="sourceLine" id="cb3-2" title="2">network<span class="op">$</span>Treat.order </a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;               1               2               3               4               5 </span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt;       &quot;Placebo&quot;   &quot;Pramipexole&quot;    &quot;Ropinirole&quot; &quot;Bromocriptine&quot;   &quot;Cabergoline&quot;</span></a>
-<a class="sourceLine" id="cb3-5" title="5">network<span class="op">$</span>Study.order</a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; 1 2 3 4 5 6 7 </span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; 1 2 3 4 5 6 7</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(parkinsons, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">SE =</span> SE, <span class="dt">response =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">Treat.order =</span> Treat.order))
+network<span class="op">$</span>Treat.order 
+<span class="co">#&gt;               1               2               3               4               5 </span>
+<span class="co">#&gt;       &quot;Placebo&quot;   &quot;Pramipexole&quot;    &quot;Ropinirole&quot; &quot;Bromocriptine&quot;   &quot;Cabergoline&quot;</span>
+network<span class="op">$</span>Study.order
+<span class="co">#&gt; 1 2 3 4 5 6 7 </span>
+<span class="co">#&gt; 1 2 3 4 5 6 7</span></code></pre></div>
 <p>Another important preprocessing step that is done through <code>network.data</code> function is to change the arm-level data into study-level data. We store the study-level data of Outcomes as r, Treat as t, N or SE as n or se. We can see how Outcomes changed into a matrix given below. Similarly, if the Outcomes are multinomial, it will change to a 3 dimensional array.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">network<span class="op">$</span>r</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt;       [,1]  [,2] [,3]</span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1,] -1.22 -1.53   NA</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; [2,] -0.70 -2.40   NA</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; [3,] -0.30 -2.60 -1.2</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; [4,] -0.24 -0.59   NA</span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [5,] -0.73 -0.18   NA</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; [6,] -2.20 -2.50   NA</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [7,] -1.80 -2.10   NA</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network<span class="op">$</span>r
+<span class="co">#&gt;       [,1]  [,2] [,3]</span>
+<span class="co">#&gt; [1,] -1.22 -1.53   NA</span>
+<span class="co">#&gt; [2,] -0.70 -2.40   NA</span>
+<span class="co">#&gt; [3,] -0.30 -2.60 -1.2</span>
+<span class="co">#&gt; [4,] -0.24 -0.59   NA</span>
+<span class="co">#&gt; [5,] -0.73 -0.18   NA</span>
+<span class="co">#&gt; [6,] -2.20 -2.50   NA</span>
+<span class="co">#&gt; [7,] -1.80 -2.10   NA</span></code></pre></div>
 </div>
 <div id="priors" class="section level2">
 <h2>Priors</h2>
 <p>Priors can be set in the <code>network.data</code> function. Please take a look at the function description for the prior specifications. For heterogeneity parameters of the random effects model, we follow the data format from a similar Bayesian network meta-analysis R package <code>gemtc</code>. It should be a list of length 3 where first element should be the distribution (one of dunif, dgamma, dhnorm, dwish) and the next two are the parameters associated with the distribution. Here is an example.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(smoking, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">mean.d =</span> <span class="fl">0.1</span>, <span class="dt">hy.prior =</span> <span class="kw">list</span>(<span class="st">&quot;dhnorm&quot;</span>, <span class="dv">0</span>, <span class="dv">5</span>)))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(smoking, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">mean.d =</span> <span class="fl">0.1</span>, <span class="dt">hy.prior =</span> <span class="kw">list</span>(<span class="st">&quot;dhnorm&quot;</span>, <span class="dv">0</span>, <span class="dv">5</span>)))</code></pre></div>
 </div>
 <div id="running-the-model" class="section level2">
 <h2>Running the model</h2>
 <p>Now to run the network, we use the function <code>network.run</code>. There are many parameters that can be modified, but the most important is the parameter <code>n.run</code> which determines how many final observations the user wants. Gelman-Rubin statitics is checked automatically every <code>setsize</code> number of iterations and once the series have converged we store the last half of the sequence. If the number of iteration is less than the number of observations user wanted (<code>n.runs</code>), it will sample more to fill the requirement. One of the nice feature of this package is that it checks for convergence automatically and will give an error if the sequence has not converged. The parameters tested for convergence are the relative treatment effects, baseline effect, and heterogeneity parameter. The number that is printed during the running of the model is the point estimate of the Gelman-Rubin statistics.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network, <span class="dt">n.run =</span> <span class="dv">30000</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;    Observed stochastic nodes: 50</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;    Unobserved stochastic nodes: 54</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;    Total graph size: 1129</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; [1] 1.002398</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; [1] 1.001631</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network, <span class="dt">n.run =</span> <span class="dv">30000</span>)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 50</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 54</span>
+<span class="co">#&gt;    Total graph size: 1129</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.002525</span>
+<span class="co">#&gt; [1] 1.001945</span></code></pre></div>
 </div>
 <div id="model-summary" class="section level2">
 <h2>Model Summary</h2>
 <p>Package includes many summary tools that can be used. One of the more useful summary might be the forest plot. Please look over the R package guide for more possible options.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">network.forest.plot</span>(result)</a></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># draw.network.graph(network)</span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="co"># network.autocorr.diag(result)</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co"># network.autocorr.plot(result)</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co"># network.cumrank.tx.plot(result)</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co"># network.deviance.plot(result)</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co"># network.gelman.plot(result)</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">network.forest.plot</span>(result)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># draw.network.graph(network)</span>
+<span class="co"># network.autocorr.diag(result)</span>
+<span class="co"># network.autocorr.plot(result)</span>
+<span class="co"># network.cumrank.tx.plot(result)</span>
+<span class="co"># network.deviance.plot(result)</span>
+<span class="co"># network.gelman.plot(result)</span></code></pre></div>
 </div>
 <div id="multinomial-model" class="section level2">
 <h2>Multinomial model</h2>
 <p>Another nice feature of this network meta analysis package is that multinomial outcome dataset can be analyzed. Here is an example.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(cardiovascular, <span class="kw">network.data</span>(Outcomes, Study, Treat, N, <span class="dt">response =</span> <span class="st">&quot;multinomial&quot;</span>))</a>
-<a class="sourceLine" id="cb9-2" title="2">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)</a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="co">#&gt;    Observed stochastic nodes: 34</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt;    Unobserved stochastic nodes: 37</span></a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt;    Total graph size: 1301</span></a>
-<a class="sourceLine" id="cb9-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb9-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-13" title="13"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb9-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-15" title="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-16" title="16"><span class="co">#&gt; [1] 1.00643</span></a>
-<a class="sourceLine" id="cb9-17" title="17"><span class="co">#&gt; [1] 1.003633</span></a>
-<a class="sourceLine" id="cb9-18" title="18"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb9-19" title="19"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb9-20" title="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-21" title="21"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb9-22" title="22"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb9-23" title="23"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb9-24" title="24"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb9-25" title="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-26" title="26"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb9-27" title="27"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb9-28" title="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-29" title="29"><span class="co">#&gt;                 Mean      SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb9-30" title="30"><span class="co">#&gt; d[1,1]      0.000000 0.00000 0.000e+00      0.0000000</span></a>
-<a class="sourceLine" id="cb9-31" title="31"><span class="co">#&gt; d[2,1]     -0.103699 0.15113 3.902e-04      0.0011250</span></a>
-<a class="sourceLine" id="cb9-32" title="32"><span class="co">#&gt; d[3,1]     -0.047166 0.11247 2.904e-04      0.0006966</span></a>
-<a class="sourceLine" id="cb9-33" title="33"><span class="co">#&gt; d[1,2]      0.000000 0.00000 0.000e+00      0.0000000</span></a>
-<a class="sourceLine" id="cb9-34" title="34"><span class="co">#&gt; d[2,2]     -0.188302 0.15416 3.980e-04      0.0011531</span></a>
-<a class="sourceLine" id="cb9-35" title="35"><span class="co">#&gt; d[3,2]     -0.270529 0.11195 2.891e-04      0.0006597</span></a>
-<a class="sourceLine" id="cb9-36" title="36"><span class="co">#&gt; sigma[1,1]  0.114629 0.05037 1.301e-04      0.0002387</span></a>
-<a class="sourceLine" id="cb9-37" title="37"><span class="co">#&gt; sigma[2,1]  0.005066 0.03433 8.863e-05      0.0001655</span></a>
-<a class="sourceLine" id="cb9-38" title="38"><span class="co">#&gt; sigma[1,2]  0.005066 0.03433 8.863e-05      0.0001655</span></a>
-<a class="sourceLine" id="cb9-39" title="39"><span class="co">#&gt; sigma[2,2]  0.114286 0.05064 1.308e-04      0.0002382</span></a>
-<a class="sourceLine" id="cb9-40" title="40"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-41" title="41"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb9-42" title="42"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-43" title="43"><span class="co">#&gt;                2.5%      25%       50%       75%    97.5%</span></a>
-<a class="sourceLine" id="cb9-44" title="44"><span class="co">#&gt; d[1,1]      0.00000  0.00000  0.000000  0.000000  0.00000</span></a>
-<a class="sourceLine" id="cb9-45" title="45"><span class="co">#&gt; d[2,1]     -0.40174 -0.20220 -0.104481 -0.005028  0.19588</span></a>
-<a class="sourceLine" id="cb9-46" title="46"><span class="co">#&gt; d[3,1]     -0.27143 -0.12015 -0.046752  0.026471  0.17326</span></a>
-<a class="sourceLine" id="cb9-47" title="47"><span class="co">#&gt; d[1,2]      0.00000  0.00000  0.000000  0.000000  0.00000</span></a>
-<a class="sourceLine" id="cb9-48" title="48"><span class="co">#&gt; d[2,2]     -0.49532 -0.28925 -0.187614 -0.086583  0.11400</span></a>
-<a class="sourceLine" id="cb9-49" title="49"><span class="co">#&gt; d[3,2]     -0.49463 -0.34297 -0.269973 -0.197722 -0.05108</span></a>
-<a class="sourceLine" id="cb9-50" title="50"><span class="co">#&gt; sigma[1,1]  0.05193  0.08045  0.103626  0.135871  0.24109</span></a>
-<a class="sourceLine" id="cb9-51" title="51"><span class="co">#&gt; sigma[2,1] -0.06213 -0.01382  0.004252  0.023001  0.07702</span></a>
-<a class="sourceLine" id="cb9-52" title="52"><span class="co">#&gt; sigma[1,2] -0.06213 -0.01382  0.004252  0.023001  0.07702</span></a>
-<a class="sourceLine" id="cb9-53" title="53"><span class="co">#&gt; sigma[2,2]  0.05174  0.08017  0.103290  0.135540  0.24211</span></a>
-<a class="sourceLine" id="cb9-54" title="54"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-55" title="55"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-56" title="56"><span class="co">#&gt; $Treat.order</span></a>
-<a class="sourceLine" id="cb9-57" title="57"><span class="co">#&gt; 1 2 3 </span></a>
-<a class="sourceLine" id="cb9-58" title="58"><span class="co">#&gt; 1 2 3 </span></a>
-<a class="sourceLine" id="cb9-59" title="59"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-60" title="60"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb9-61" title="61"><span class="co">#&gt;     Dbar       pD      DIC </span></a>
-<a class="sourceLine" id="cb9-62" title="62"><span class="co">#&gt; 31.21727 60.43751 91.65478 </span></a>
-<a class="sourceLine" id="cb9-63" title="63"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-64" title="64"><span class="co">#&gt; $total_n</span></a>
-<a class="sourceLine" id="cb9-65" title="65"><span class="co">#&gt; [1] 34</span></a>
-<a class="sourceLine" id="cb9-66" title="66"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-67" title="67"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb9-68" title="68"><span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(cardiovascular, <span class="kw">network.data</span>(Outcomes, Study, Treat, N, <span class="dt">response =</span> <span class="st">&quot;multinomial&quot;</span>))
+result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 34</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 37</span>
+<span class="co">#&gt;    Total graph size: 1301</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.003068</span>
+<span class="co">#&gt; [1] 1.002375</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                 Mean      SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; d[1,1]      0.000000 0.00000 0.000e+00      0.0000000</span>
+<span class="co">#&gt; d[2,1]     -0.104189 0.15246 3.937e-04      0.0011592</span>
+<span class="co">#&gt; d[3,1]     -0.049053 0.11274 2.911e-04      0.0007009</span>
+<span class="co">#&gt; d[1,2]      0.000000 0.00000 0.000e+00      0.0000000</span>
+<span class="co">#&gt; d[2,2]     -0.188921 0.15422 3.982e-04      0.0011739</span>
+<span class="co">#&gt; d[3,2]     -0.269899 0.11180 2.887e-04      0.0006535</span>
+<span class="co">#&gt; sigma[1,1]  0.114946 0.05089 1.314e-04      0.0002477</span>
+<span class="co">#&gt; sigma[2,1]  0.004592 0.03446 8.898e-05      0.0001639</span>
+<span class="co">#&gt; sigma[1,2]  0.004592 0.03446 8.898e-05      0.0001639</span>
+<span class="co">#&gt; sigma[2,2]  0.114287 0.05007 1.293e-04      0.0002292</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                2.5%      25%       50%       75%    97.5%</span>
+<span class="co">#&gt; d[1,1]      0.00000  0.00000  0.000000  0.000000  0.00000</span>
+<span class="co">#&gt; d[2,1]     -0.40219 -0.20462 -0.105494 -0.004691  0.20001</span>
+<span class="co">#&gt; d[3,1]     -0.27341 -0.12191 -0.048654  0.024403  0.17304</span>
+<span class="co">#&gt; d[1,2]      0.00000  0.00000  0.000000  0.000000  0.00000</span>
+<span class="co">#&gt; d[2,2]     -0.49446 -0.29021 -0.187330 -0.087036  0.11185</span>
+<span class="co">#&gt; d[3,2]     -0.49332 -0.34205 -0.269110 -0.196654 -0.04965</span>
+<span class="co">#&gt; sigma[1,1]  0.05203  0.08048  0.103799  0.136253  0.24247</span>
+<span class="co">#&gt; sigma[2,1] -0.06287 -0.01429  0.003852  0.022660  0.07630</span>
+<span class="co">#&gt; sigma[1,2] -0.06287 -0.01429  0.003852  0.022660  0.07630</span>
+<span class="co">#&gt; sigma[2,2]  0.05197  0.08029  0.103549  0.135462  0.24019</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat.order</span>
+<span class="co">#&gt; 1 2 3 </span>
+<span class="co">#&gt; 1 2 3 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;     Dbar       pD      DIC </span>
+<span class="co">#&gt; 31.17863 60.34814 91.52677 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 34</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></code></pre></div>
 </div>
 <div id="adding-covariates" class="section level2">
 <h2>Adding covariates</h2>
 <p>We can add continuous or discrete covariates to fit a network meta regression. If the covariate is continuous, it is centered. Discrete variables need to be 0-1 dummy format. There are three different assumptions for covariate effect: “common”, “independent”, and “exchangeable”.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(statins, <span class="kw">network.data</span>(Outcomes, Study, Treat, <span class="dt">N=</span>N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> <span class="kw">c</span>(<span class="st">&quot;Placebo&quot;</span>, <span class="st">&quot;Statin&quot;</span>), <span class="dt">covariate =</span> covariate, <span class="dt">covariate.type =</span> <span class="st">&quot;discrete&quot;</span>, <span class="dt">covariate.model =</span> <span class="st">&quot;common&quot;</span>))</a>
-<a class="sourceLine" id="cb10-2" title="2">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)</a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt;    Observed stochastic nodes: 38</span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt;    Unobserved stochastic nodes: 41</span></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt;    Total graph size: 877</span></a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-15" title="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-16" title="16"><span class="co">#&gt; [1] 1.004625</span></a>
-<a class="sourceLine" id="cb10-17" title="17"><span class="co">#&gt; [1] 1.0125</span></a>
-<a class="sourceLine" id="cb10-18" title="18"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb10-19" title="19"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb10-20" title="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-21" title="21"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb10-22" title="22"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb10-23" title="23"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb10-24" title="24"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb10-25" title="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-26" title="26"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb10-27" title="27"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb10-28" title="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-29" title="29"><span class="co">#&gt;              Mean     SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb10-30" title="30"><span class="co">#&gt; beta1[1]  0.00000 0.0000 0.0000000       0.000000</span></a>
-<a class="sourceLine" id="cb10-31" title="31"><span class="co">#&gt; beta1[2] -0.30346 0.2589 0.0006684       0.003760</span></a>
-<a class="sourceLine" id="cb10-32" title="32"><span class="co">#&gt; d[1]      0.00000 0.0000 0.0000000       0.000000</span></a>
-<a class="sourceLine" id="cb10-33" title="33"><span class="co">#&gt; d[2]     -0.06332 0.2038 0.0005261       0.002734</span></a>
-<a class="sourceLine" id="cb10-34" title="34"><span class="co">#&gt; sd        0.23774 0.2011 0.0005193       0.005617</span></a>
-<a class="sourceLine" id="cb10-35" title="35"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-36" title="36"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb10-37" title="37"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-38" title="38"><span class="co">#&gt;              2.5%      25%      50%      75%  97.5%</span></a>
-<a class="sourceLine" id="cb10-39" title="39"><span class="co">#&gt; beta1[1]  0.00000  0.00000  0.00000  0.00000 0.0000</span></a>
-<a class="sourceLine" id="cb10-40" title="40"><span class="co">#&gt; beta1[2] -0.87613 -0.43621 -0.28563 -0.15557 0.1749</span></a>
-<a class="sourceLine" id="cb10-41" title="41"><span class="co">#&gt; d[1]      0.00000  0.00000  0.00000  0.00000 0.0000</span></a>
-<a class="sourceLine" id="cb10-42" title="42"><span class="co">#&gt; d[2]     -0.46215 -0.17376 -0.06922  0.04373 0.3630</span></a>
-<a class="sourceLine" id="cb10-43" title="43"><span class="co">#&gt; sd        0.01274  0.09362  0.18597  0.32610 0.7605</span></a>
-<a class="sourceLine" id="cb10-44" title="44"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-45" title="45"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-46" title="46"><span class="co">#&gt; $Treat.order</span></a>
-<a class="sourceLine" id="cb10-47" title="47"><span class="co">#&gt;         1         2 </span></a>
-<a class="sourceLine" id="cb10-48" title="48"><span class="co">#&gt; &quot;Placebo&quot;  &quot;Statin&quot; </span></a>
-<a class="sourceLine" id="cb10-49" title="49"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-50" title="50"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb10-51" title="51"><span class="co">#&gt;     Dbar       pD      DIC </span></a>
-<a class="sourceLine" id="cb10-52" title="52"><span class="co">#&gt; 42.63775 24.98447 67.62222 </span></a>
-<a class="sourceLine" id="cb10-53" title="53"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-54" title="54"><span class="co">#&gt; $total_n</span></a>
-<a class="sourceLine" id="cb10-55" title="55"><span class="co">#&gt; [1] 38</span></a>
-<a class="sourceLine" id="cb10-56" title="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-57" title="57"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb10-58" title="58"><span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(statins, <span class="kw">network.data</span>(Outcomes, Study, Treat, <span class="dt">N=</span>N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> <span class="kw">c</span>(<span class="st">&quot;Placebo&quot;</span>, <span class="st">&quot;Statin&quot;</span>), <span class="dt">covariate =</span> covariate, <span class="dt">covariate.type =</span> <span class="st">&quot;discrete&quot;</span>, <span class="dt">covariate.model =</span> <span class="st">&quot;common&quot;</span>))
+result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 38</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 41</span>
+<span class="co">#&gt;    Total graph size: 877</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.021729</span>
+<span class="co">#&gt; [1] 1.023726</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;              Mean     SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; beta1[1]  0.00000 0.0000 0.0000000       0.000000</span>
+<span class="co">#&gt; beta1[2] -0.30766 0.2700 0.0006970       0.003645</span>
+<span class="co">#&gt; d[1]      0.00000 0.0000 0.0000000       0.000000</span>
+<span class="co">#&gt; d[2]     -0.06084 0.2107 0.0005440       0.002642</span>
+<span class="co">#&gt; sd        0.25309 0.2011 0.0005194       0.005036</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;              2.5%     25%      50%      75%  97.5%</span>
+<span class="co">#&gt; beta1[1]  0.00000  0.0000  0.00000  0.00000 0.0000</span>
+<span class="co">#&gt; beta1[2] -0.91080 -0.4430 -0.28981 -0.15221 0.2056</span>
+<span class="co">#&gt; d[1]      0.00000  0.0000  0.00000  0.00000 0.0000</span>
+<span class="co">#&gt; d[2]     -0.47785 -0.1759 -0.06675  0.05008 0.3896</span>
+<span class="co">#&gt; sd        0.01255  0.1030  0.20518  0.35357 0.7616</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat.order</span>
+<span class="co">#&gt;         1         2 </span>
+<span class="co">#&gt; &quot;Placebo&quot;  &quot;Statin&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;     Dbar       pD      DIC </span>
+<span class="co">#&gt; 42.52369 25.26461 67.78831 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 38</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></code></pre></div>
 <p>Covariate plot shows you how the relative effect changes as the covariate varies.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">network.covariate.plot</span>(result, <span class="dt">base.treatment =</span> <span class="st">&quot;Placebo&quot;</span>, <span class="dt">comparison.treatment =</span> <span class="st">&quot;Statin&quot;</span>)</a></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">network.covariate.plot</span>(result, <span class="dt">base.treatment =</span> <span class="st">&quot;Placebo&quot;</span>, <span class="dt">comparison.treatment =</span> <span class="st">&quot;Statin&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="baseline-risk" class="section level2">
 <h2>Baseline risk</h2>
 <p>Another useful addition to this network package is the ability to add baseline risk. We can have “common”, “independent”, or “exchangeable” assumption on the baseline slopes and “independenet” and “exchangeable” assumption on the baseline risk. Here we demonstrate a common slope and exchangeable baseline risk model.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(certolizumab, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Treat =</span> Treat, <span class="dt">Study =</span> Study, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> Treat.order, <span class="dt">baseline =</span> <span class="st">&quot;common&quot;</span>, <span class="dt">baseline.risk =</span> <span class="st">&quot;exchangeable&quot;</span>))</a>
-<a class="sourceLine" id="cb12-2" title="2">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)</a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt;    Observed stochastic nodes: 24</span></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="co">#&gt;    Unobserved stochastic nodes: 34</span></a>
-<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt;    Total graph size: 670</span></a>
-<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-11" title="11"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb12-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-13" title="13"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb12-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-16" title="16"><span class="co">#&gt; [1] 1.035227</span></a>
-<a class="sourceLine" id="cb12-17" title="17"><span class="co">#&gt; [1] 1.014213</span></a>
-<a class="sourceLine" id="cb12-18" title="18"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb12-19" title="19"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb12-20" title="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-21" title="21"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb12-22" title="22"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb12-23" title="23"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb12-24" title="24"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb12-25" title="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-26" title="26"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb12-27" title="27"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb12-28" title="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-29" title="29"><span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb12-30" title="30"><span class="co">#&gt; B       -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-31" title="31"><span class="co">#&gt; b_bl[1]  0.0000 0.0000 0.0000000       0.000000</span></a>
-<a class="sourceLine" id="cb12-32" title="32"><span class="co">#&gt; b_bl[2] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-33" title="33"><span class="co">#&gt; b_bl[3] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-34" title="34"><span class="co">#&gt; b_bl[4] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-35" title="35"><span class="co">#&gt; b_bl[5] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-36" title="36"><span class="co">#&gt; b_bl[6] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-37" title="37"><span class="co">#&gt; b_bl[7] -0.7719 0.2873 0.0007417       0.004724</span></a>
-<a class="sourceLine" id="cb12-38" title="38"><span class="co">#&gt; d[1]     0.0000 0.0000 0.0000000       0.000000</span></a>
-<a class="sourceLine" id="cb12-39" title="39"><span class="co">#&gt; d[2]     1.8712 0.2361 0.0006097       0.002070</span></a>
-<a class="sourceLine" id="cb12-40" title="40"><span class="co">#&gt; d[3]     2.1338 0.2122 0.0005479       0.002299</span></a>
-<a class="sourceLine" id="cb12-41" title="41"><span class="co">#&gt; d[4]     2.0368 0.4340 0.0011206       0.005873</span></a>
-<a class="sourceLine" id="cb12-42" title="42"><span class="co">#&gt; d[5]     1.6340 0.2052 0.0005298       0.002053</span></a>
-<a class="sourceLine" id="cb12-43" title="43"><span class="co">#&gt; d[6]     0.3128 0.5854 0.0015116       0.009835</span></a>
-<a class="sourceLine" id="cb12-44" title="44"><span class="co">#&gt; d[7]     2.1463 0.2956 0.0007632       0.003120</span></a>
-<a class="sourceLine" id="cb12-45" title="45"><span class="co">#&gt; sd       0.1898 0.1829 0.0004723       0.003784</span></a>
-<a class="sourceLine" id="cb12-46" title="46"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-47" title="47"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb12-48" title="48"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-49" title="49"><span class="co">#&gt;              2.5%      25%     50%     75%   97.5%</span></a>
-<a class="sourceLine" id="cb12-50" title="50"><span class="co">#&gt; B       -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-51" title="51"><span class="co">#&gt; b_bl[1]  0.000000  0.00000  0.0000  0.0000  0.0000</span></a>
-<a class="sourceLine" id="cb12-52" title="52"><span class="co">#&gt; b_bl[2] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-53" title="53"><span class="co">#&gt; b_bl[3] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-54" title="54"><span class="co">#&gt; b_bl[4] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-55" title="55"><span class="co">#&gt; b_bl[5] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-56" title="56"><span class="co">#&gt; b_bl[6] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-57" title="57"><span class="co">#&gt; b_bl[7] -1.274653 -0.92120 -0.7886 -0.6408 -0.1721</span></a>
-<a class="sourceLine" id="cb12-58" title="58"><span class="co">#&gt; d[1]     0.000000  0.00000  0.0000  0.0000  0.0000</span></a>
-<a class="sourceLine" id="cb12-59" title="59"><span class="co">#&gt; d[2]     1.405039  1.75845  1.8703  1.9849  2.3254</span></a>
-<a class="sourceLine" id="cb12-60" title="60"><span class="co">#&gt; d[3]     1.732589  2.01611  2.1289  2.2457  2.5677</span></a>
-<a class="sourceLine" id="cb12-61" title="61"><span class="co">#&gt; d[4]     1.200529  1.78352  2.0374  2.2898  2.8838</span></a>
-<a class="sourceLine" id="cb12-62" title="62"><span class="co">#&gt; d[5]     1.230393  1.52908  1.6348  1.7403  2.0360</span></a>
-<a class="sourceLine" id="cb12-63" title="63"><span class="co">#&gt; d[6]    -0.903185 -0.05757  0.3361  0.7091  1.3796</span></a>
-<a class="sourceLine" id="cb12-64" title="64"><span class="co">#&gt; d[7]     1.570700  1.99306  2.1455  2.2951  2.7366</span></a>
-<a class="sourceLine" id="cb12-65" title="65"><span class="co">#&gt; sd       0.005529  0.06682  0.1446  0.2540  0.6597</span></a>
-<a class="sourceLine" id="cb12-66" title="66"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-67" title="67"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-68" title="68"><span class="co">#&gt; $Treat.order</span></a>
-<a class="sourceLine" id="cb12-69" title="69"><span class="co">#&gt;             1             2             3             4             5 </span></a>
-<a class="sourceLine" id="cb12-70" title="70"><span class="co">#&gt;     &quot;Placebo&quot;         &quot;CZP&quot;  &quot;Adalimumab&quot;  &quot;Etanercept&quot;  &quot;Infliximab&quot; </span></a>
-<a class="sourceLine" id="cb12-71" title="71"><span class="co">#&gt;             6             7 </span></a>
-<a class="sourceLine" id="cb12-72" title="72"><span class="co">#&gt;   &quot;Rituximab&quot; &quot;Tocilizumab&quot; </span></a>
-<a class="sourceLine" id="cb12-73" title="73"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-74" title="74"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb12-75" title="75"><span class="co">#&gt;     Dbar       pD      DIC </span></a>
-<a class="sourceLine" id="cb12-76" title="76"><span class="co">#&gt; 27.76089 18.69827 46.45916 </span></a>
-<a class="sourceLine" id="cb12-77" title="77"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-78" title="78"><span class="co">#&gt; $total_n</span></a>
-<a class="sourceLine" id="cb12-79" title="79"><span class="co">#&gt; [1] 24</span></a>
-<a class="sourceLine" id="cb12-80" title="80"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-81" title="81"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb12-82" title="82"><span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(certolizumab, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Treat =</span> Treat, <span class="dt">Study =</span> Study, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> Treat.order, <span class="dt">baseline =</span> <span class="st">&quot;common&quot;</span>, <span class="dt">baseline.risk =</span> <span class="st">&quot;exchangeable&quot;</span>))
+result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 24</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 34</span>
+<span class="co">#&gt;    Total graph size: 670</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.017221</span>
+<span class="co">#&gt; [1] 1.006261</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; B       -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[1]  0.0000 0.0000 0.0000000       0.000000</span>
+<span class="co">#&gt; b_bl[2] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[3] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[4] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[5] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[6] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; b_bl[7] -0.7761 0.2819 0.0007279       0.004051</span>
+<span class="co">#&gt; d[1]     0.0000 0.0000 0.0000000       0.000000</span>
+<span class="co">#&gt; d[2]     1.8647 0.2340 0.0006041       0.001847</span>
+<span class="co">#&gt; d[3]     2.1372 0.2125 0.0005487       0.002078</span>
+<span class="co">#&gt; d[4]     2.0289 0.4301 0.0011106       0.005668</span>
+<span class="co">#&gt; d[5]     1.6336 0.2066 0.0005335       0.002054</span>
+<span class="co">#&gt; d[6]     0.3237 0.5851 0.0015108       0.009665</span>
+<span class="co">#&gt; d[7]     2.1471 0.2959 0.0007641       0.002956</span>
+<span class="co">#&gt; sd       0.1927 0.1819 0.0004697       0.003743</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;              2.5%      25%     50%     75%   97.5%</span>
+<span class="co">#&gt; B       -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[1]  0.000000  0.00000  0.0000  0.0000  0.0000</span>
+<span class="co">#&gt; b_bl[2] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[3] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[4] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[5] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[6] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; b_bl[7] -1.288579 -0.92681 -0.7898 -0.6374 -0.1837</span>
+<span class="co">#&gt; d[1]     0.000000  0.00000  0.0000  0.0000  0.0000</span>
+<span class="co">#&gt; d[2]     1.401265  1.75332  1.8633  1.9770  2.3188</span>
+<span class="co">#&gt; d[3]     1.746155  2.01498  2.1323  2.2483  2.5730</span>
+<span class="co">#&gt; d[4]     1.215907  1.77573  2.0264  2.2799  2.8729</span>
+<span class="co">#&gt; d[5]     1.228598  1.52377  1.6344  1.7430  2.0379</span>
+<span class="co">#&gt; d[6]    -0.884015 -0.04099  0.3480  0.7147  1.3918</span>
+<span class="co">#&gt; d[7]     1.588295  1.99024  2.1455  2.2997  2.7357</span>
+<span class="co">#&gt; sd       0.006733  0.07093  0.1494  0.2578  0.6528</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat.order</span>
+<span class="co">#&gt;             1             2             3             4             5 </span>
+<span class="co">#&gt;     &quot;Placebo&quot;         &quot;CZP&quot;  &quot;Adalimumab&quot;  &quot;Etanercept&quot;  &quot;Infliximab&quot; </span>
+<span class="co">#&gt;             6             7 </span>
+<span class="co">#&gt;   &quot;Rituximab&quot; &quot;Tocilizumab&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;     Dbar       pD      DIC </span>
+<span class="co">#&gt; 27.86369 18.61288 46.47657 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></code></pre></div>
 </div>
 <div id="contrast-data" class="section level2">
 <h2>Contrast data</h2>
 <p>We also added model to analyze contrast-level data instead of arms-level data. Contrast level format uses treatment differences relative to the control arms.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(parkinsons_contrast, {</a>
-<a class="sourceLine" id="cb13-2" title="2">  <span class="kw">contrast.network.data</span>(Outcomes, Treat, SE, na, V, <span class="dt">type =</span> <span class="st">&quot;random&quot;</span>, <span class="dt">mean.d =</span> <span class="fl">0.01</span>, <span class="dt">prec.d =</span> <span class="fl">0.1</span>, <span class="dt">hy.prior =</span> <span class="kw">list</span>(<span class="st">&quot;dhnorm&quot;</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>))</a>
-<a class="sourceLine" id="cb13-3" title="3">})</a>
-<a class="sourceLine" id="cb13-4" title="4">result &lt;-<span class="st"> </span><span class="kw">contrast.network.run</span>(network)</a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb13-6" title="6"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb13-8" title="8"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb13-9" title="9"><span class="co">#&gt;    Observed stochastic nodes: 7</span></a>
-<a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt;    Unobserved stochastic nodes: 13</span></a>
-<a class="sourceLine" id="cb13-11" title="11"><span class="co">#&gt;    Total graph size: 197</span></a>
-<a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-13" title="13"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-15" title="15"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb13-16" title="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-17" title="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-18" title="18"><span class="co">#&gt; [1] 1.034092</span></a>
-<a class="sourceLine" id="cb13-19" title="19"><span class="co">#&gt; [1] 1.010407</span></a>
-<a class="sourceLine" id="cb13-20" title="20"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb13-21" title="21"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb13-22" title="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-23" title="23"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb13-24" title="24"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb13-25" title="25"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb13-26" title="26"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb13-27" title="27"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-28" title="28"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb13-29" title="29"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb13-30" title="30"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-31" title="31"><span class="co">#&gt;         Mean     SD Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb13-32" title="32"><span class="co">#&gt; d[1]  0.0000 0.0000 0.000000       0.000000</span></a>
-<a class="sourceLine" id="cb13-33" title="33"><span class="co">#&gt; d[2] -1.7881 0.5108 0.001319       0.004747</span></a>
-<a class="sourceLine" id="cb13-34" title="34"><span class="co">#&gt; d[3] -0.4243 0.6205 0.001602       0.008288</span></a>
-<a class="sourceLine" id="cb13-35" title="35"><span class="co">#&gt; d[4] -0.4543 0.5959 0.001539       0.008578</span></a>
-<a class="sourceLine" id="cb13-36" title="36"><span class="co">#&gt; d[5] -0.7419 0.7136 0.001842       0.009068</span></a>
-<a class="sourceLine" id="cb13-37" title="37"><span class="co">#&gt; sd    0.4003 0.6041 0.001560       0.032821</span></a>
-<a class="sourceLine" id="cb13-38" title="38"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-39" title="39"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb13-40" title="40"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-41" title="41"><span class="co">#&gt;          2.5%     25%     50%      75%   97.5%</span></a>
-<a class="sourceLine" id="cb13-42" title="42"><span class="co">#&gt; d[1]  0.00000  0.0000  0.0000  0.00000  0.0000</span></a>
-<a class="sourceLine" id="cb13-43" title="43"><span class="co">#&gt; d[2] -2.74745 -2.0817 -1.7896 -1.50950 -0.7963</span></a>
-<a class="sourceLine" id="cb13-44" title="44"><span class="co">#&gt; d[3] -1.60443 -0.8067 -0.4240 -0.04671  0.7786</span></a>
-<a class="sourceLine" id="cb13-45" title="45"><span class="co">#&gt; d[4] -1.57843 -0.8344 -0.4567 -0.09252  0.7001</span></a>
-<a class="sourceLine" id="cb13-46" title="46"><span class="co">#&gt; d[5] -2.09270 -1.1761 -0.7492 -0.32371  0.6570</span></a>
-<a class="sourceLine" id="cb13-47" title="47"><span class="co">#&gt; sd    0.01281  0.1266  0.2761  0.51082  1.3822</span></a>
-<a class="sourceLine" id="cb13-48" title="48"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-49" title="49"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-50" title="50"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb13-51" title="51"><span class="co">#&gt;      Dbar        pD       DIC </span></a>
-<a class="sourceLine" id="cb13-52" title="52"><span class="co">#&gt;  6.595379  5.473181 12.068560 </span></a>
-<a class="sourceLine" id="cb13-53" title="53"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-54" title="54"><span class="co">#&gt; $total_n</span></a>
-<a class="sourceLine" id="cb13-55" title="55"><span class="co">#&gt; [1] 15</span></a>
-<a class="sourceLine" id="cb13-56" title="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-57" title="57"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb13-58" title="58"><span class="co">#&gt; [1] &quot;summary.contrast.network.result&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(parkinsons_contrast, {
+  <span class="kw">contrast.network.data</span>(Outcomes, Treat, SE, na, V, <span class="dt">type =</span> <span class="st">&quot;random&quot;</span>, <span class="dt">mean.d =</span> <span class="fl">0.01</span>, <span class="dt">prec.d =</span> <span class="fl">0.1</span>, <span class="dt">hy.prior =</span> <span class="kw">list</span>(<span class="st">&quot;dhnorm&quot;</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>))
+})
+result &lt;-<span class="st"> </span><span class="kw">contrast.network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 7</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 13</span>
+<span class="co">#&gt;    Total graph size: 197</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.022223</span>
+<span class="co">#&gt; [1] 1.067457</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;         Mean     SD Naive SE Time-series SE</span>
+<span class="co">#&gt; d[1]  0.0000 0.0000 0.000000       0.000000</span>
+<span class="co">#&gt; d[2] -1.7872 0.5022 0.001297       0.004382</span>
+<span class="co">#&gt; d[3] -0.4394 0.6008 0.001551       0.007742</span>
+<span class="co">#&gt; d[4] -0.4737 0.5799 0.001497       0.008324</span>
+<span class="co">#&gt; d[5] -0.7646 0.6995 0.001806       0.008774</span>
+<span class="co">#&gt; sd    0.3819 0.4357 0.001125       0.010351</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;          2.5%     25%     50%      75%   97.5%</span>
+<span class="co">#&gt; d[1]  0.00000  0.0000  0.0000  0.00000  0.0000</span>
+<span class="co">#&gt; d[2] -2.73879 -2.0748 -1.7949 -1.50857 -0.8039</span>
+<span class="co">#&gt; d[3] -1.59245 -0.8114 -0.4459 -0.07332  0.7363</span>
+<span class="co">#&gt; d[4] -1.59142 -0.8356 -0.4845 -0.12836  0.6815</span>
+<span class="co">#&gt; d[5] -2.08822 -1.1844 -0.7753 -0.36634  0.6488</span>
+<span class="co">#&gt; sd    0.01063  0.1190  0.2634  0.49820  1.4360</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;      Dbar        pD       DIC </span>
+<span class="co">#&gt;  6.505550  5.368292 11.873842 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 15</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.contrast.network.result&quot;</span></code></pre></div>
 </div>
 <div id="unrelated-means-model" class="section level2">
 <h2>Unrelated Means Model</h2>
 <p>Unrelated mean effects (UME) model estimates separate, unrelated basic parameters. We do not assume consistency in this model. We can compare this model with the standard consistency model. If the parameter estimates are similar for both models, and there is considerable overlap in the 95% credible interval, we can conclude that there is no evidence of inconsistency in the network.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(smoking, {</a>
-<a class="sourceLine" id="cb14-2" title="2">  <span class="kw">ume.network.data</span>(Outcomes, Study, Treat, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;random&quot;</span>)</a>
-<a class="sourceLine" id="cb14-3" title="3">})</a>
-<a class="sourceLine" id="cb14-4" title="4">result &lt;-<span class="st"> </span><span class="kw">ume.network.run</span>(network)</a>
-<a class="sourceLine" id="cb14-5" title="5"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb14-9" title="9"><span class="co">#&gt;    Observed stochastic nodes: 50</span></a>
-<a class="sourceLine" id="cb14-10" title="10"><span class="co">#&gt;    Unobserved stochastic nodes: 57</span></a>
-<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt;    Total graph size: 1020</span></a>
-<a class="sourceLine" id="cb14-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-13" title="13"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb14-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-15" title="15"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb14-16" title="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-17" title="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-18" title="18"><span class="co">#&gt; [1] 1.007514</span></a>
-<a class="sourceLine" id="cb14-19" title="19"><span class="co">#&gt; [1] 1.001695</span></a>
-<a class="sourceLine" id="cb14-20" title="20"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb14-21" title="21"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb14-22" title="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-23" title="23"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb14-24" title="24"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb14-25" title="25"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb14-26" title="26"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb14-27" title="27"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-28" title="28"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb14-29" title="29"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb14-30" title="30"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-31" title="31"><span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb14-32" title="32"><span class="co">#&gt; d[1,2]  0.34423 0.5799 0.0014973       0.002036</span></a>
-<a class="sourceLine" id="cb14-33" title="33"><span class="co">#&gt; d[1,3]  0.86206 0.2746 0.0007091       0.001511</span></a>
-<a class="sourceLine" id="cb14-34" title="34"><span class="co">#&gt; d[2,3] -0.05992 0.7438 0.0019205       0.003071</span></a>
-<a class="sourceLine" id="cb14-35" title="35"><span class="co">#&gt; d[1,4]  1.42466 0.8807 0.0022740       0.006738</span></a>
-<a class="sourceLine" id="cb14-36" title="36"><span class="co">#&gt; d[2,4]  0.64307 0.7343 0.0018961       0.003406</span></a>
-<a class="sourceLine" id="cb14-37" title="37"><span class="co">#&gt; d[3,4]  0.20049 0.7837 0.0020235       0.003227</span></a>
-<a class="sourceLine" id="cb14-38" title="38"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-39" title="39"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb14-40" title="40"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-41" title="41"><span class="co">#&gt;           2.5%      25%      50%    75% 97.5%</span></a>
-<a class="sourceLine" id="cb14-42" title="42"><span class="co">#&gt; d[1,2] -0.7991 -0.02898  0.34235 0.7100 1.507</span></a>
-<a class="sourceLine" id="cb14-43" title="43"><span class="co">#&gt; d[1,3]  0.3360  0.68277  0.85524 1.0329 1.430</span></a>
-<a class="sourceLine" id="cb14-44" title="44"><span class="co">#&gt; d[2,3] -1.5379 -0.53774 -0.05961 0.4189 1.407</span></a>
-<a class="sourceLine" id="cb14-45" title="45"><span class="co">#&gt; d[1,4] -0.2059  0.83599  1.38513 1.9689 3.286</span></a>
-<a class="sourceLine" id="cb14-46" title="46"><span class="co">#&gt; d[2,4] -0.8077  0.16978  0.63859 1.1129 2.104</span></a>
-<a class="sourceLine" id="cb14-47" title="47"><span class="co">#&gt; d[3,4] -1.3723 -0.30170  0.20630 0.7149 1.727</span></a>
-<a class="sourceLine" id="cb14-48" title="48"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-49" title="49"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-50" title="50"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb14-51" title="51"><span class="co">#&gt;     Dbar       pD      DIC </span></a>
-<a class="sourceLine" id="cb14-52" title="52"><span class="co">#&gt; 53.52763 44.97430 98.50193 </span></a>
-<a class="sourceLine" id="cb14-53" title="53"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-54" title="54"><span class="co">#&gt; $total_n</span></a>
-<a class="sourceLine" id="cb14-55" title="55"><span class="co">#&gt; [1] 50</span></a>
-<a class="sourceLine" id="cb14-56" title="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-57" title="57"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb14-58" title="58"><span class="co">#&gt; [1] &quot;summary.ume.network.result&quot;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(smoking, {
+  <span class="kw">ume.network.data</span>(Outcomes, Study, Treat, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;random&quot;</span>)
+})
+result &lt;-<span class="st"> </span><span class="kw">ume.network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 50</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 57</span>
+<span class="co">#&gt;    Total graph size: 1020</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.004331</span>
+<span class="co">#&gt; [1] 1.003862</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; d[1,2]  0.33903 0.5789 0.0014948       0.002026</span>
+<span class="co">#&gt; d[1,3]  0.85811 0.2727 0.0007042       0.001522</span>
+<span class="co">#&gt; d[2,3] -0.05116 0.7415 0.0019146       0.002957</span>
+<span class="co">#&gt; d[1,4]  1.41768 0.8776 0.0022659       0.006800</span>
+<span class="co">#&gt; d[2,4]  0.65113 0.7317 0.0018892       0.003434</span>
+<span class="co">#&gt; d[3,4]  0.20039 0.7773 0.0020071       0.003206</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           2.5%      25%      50%    75% 97.5%</span>
+<span class="co">#&gt; d[1,2] -0.8076 -0.03164  0.33672 0.7073 1.500</span>
+<span class="co">#&gt; d[1,3]  0.3389  0.67888  0.85066 1.0284 1.423</span>
+<span class="co">#&gt; d[2,3] -1.5353 -0.52661 -0.04852 0.4288 1.406</span>
+<span class="co">#&gt; d[1,4] -0.2136  0.83337  1.37822 1.9623 3.251</span>
+<span class="co">#&gt; d[2,4] -0.7906  0.17838  0.64714 1.1191 2.109</span>
+<span class="co">#&gt; d[3,4] -1.3515 -0.30108  0.20550 0.7074 1.724</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;     Dbar       pD      DIC </span>
+<span class="co">#&gt; 53.48148 44.87569 98.35717 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 50</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.ume.network.result&quot;</span></code></pre></div>
 </div>
 <div id="inconsistency-model" class="section level2">
 <h2>Inconsistency model</h2>
-<p>We included another inconsistency model that can be used to test consistency assumption. Here we can specify a pair where we want to nodesplit and test the inconsistency assumptions. For instance if we specify treatment pair = c(3, 9), we are finding the difference in the direct and indirect evidence of treatment 3 and 9. Inconsistency estimate and the corresponding p-value are reported in the summary. If the p-value is small, it means that we can reject the null hypothesis that direct and indirect evidence agree. We can repeat for all the pairs in the network and identify pairs that might be inconsistent. Refer to Dias et al. 2010 (i.e. Checking consistency in mixed treatment comparison meta-analysis) for more details.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">network &lt;-<span class="st"> </span><span class="kw">with</span>(thrombolytic, <span class="kw">nodesplit.network.data</span>(Outcomes, Study, Treat, N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">pair =</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">9</span>), <span class="dt">type =</span> <span class="st">&quot;fixed&quot;</span>))</a>
-<a class="sourceLine" id="cb15-2" title="2">result &lt;-<span class="st"> </span><span class="kw">nodesplit.network.run</span>(network)</a>
-<a class="sourceLine" id="cb15-3" title="3"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb15-5" title="5"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt;    Observed stochastic nodes: 102</span></a>
-<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt;    Unobserved stochastic nodes: 59</span></a>
-<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt;    Total graph size: 2263</span></a>
-<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt; Initializing model</span></a>
-<a class="sourceLine" id="cb15-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-13" title="13"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a>
-<a class="sourceLine" id="cb15-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-15" title="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-16" title="16"><span class="co">#&gt; [1] 1.005336</span></a>
-<a class="sourceLine" id="cb15-17" title="17"><span class="co">#&gt; [1] 1.00087</span></a>
-<a class="sourceLine" id="cb15-18" title="18"><span class="kw">summary</span>(result)</a>
-<a class="sourceLine" id="cb15-19" title="19"><span class="co">#&gt; $summary.samples</span></a>
-<a class="sourceLine" id="cb15-20" title="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-21" title="21"><span class="co">#&gt; Iterations = 1:50000</span></a>
-<a class="sourceLine" id="cb15-22" title="22"><span class="co">#&gt; Thinning interval = 1 </span></a>
-<a class="sourceLine" id="cb15-23" title="23"><span class="co">#&gt; Number of chains = 3 </span></a>
-<a class="sourceLine" id="cb15-24" title="24"><span class="co">#&gt; Sample size per chain = 50000 </span></a>
-<a class="sourceLine" id="cb15-25" title="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-26" title="26"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
-<a class="sourceLine" id="cb15-27" title="27"><span class="co">#&gt;    plus standard error of the mean:</span></a>
-<a class="sourceLine" id="cb15-28" title="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-29" title="29"><span class="co">#&gt;                    Mean      SD  Naive SE Time-series SE</span></a>
-<a class="sourceLine" id="cb15-30" title="30"><span class="co">#&gt; d[1]          0.0000000 0.00000 0.000e+00      0.000e+00</span></a>
-<a class="sourceLine" id="cb15-31" title="31"><span class="co">#&gt; d[2]         -0.0019253 0.03031 7.825e-05      1.843e-04</span></a>
-<a class="sourceLine" id="cb15-32" title="32"><span class="co">#&gt; d[3]         -0.1601517 0.04359 1.125e-04      3.552e-04</span></a>
-<a class="sourceLine" id="cb15-33" title="33"><span class="co">#&gt; d[4]         -0.0439305 0.04643 1.199e-04      2.365e-04</span></a>
-<a class="sourceLine" id="cb15-34" title="34"><span class="co">#&gt; d[5]         -0.1128707 0.06054 1.563e-04      4.775e-04</span></a>
-<a class="sourceLine" id="cb15-35" title="35"><span class="co">#&gt; d[6]         -0.1544309 0.07704 1.989e-04      5.719e-04</span></a>
-<a class="sourceLine" id="cb15-36" title="36"><span class="co">#&gt; d[7]         -0.4640451 0.10101 2.608e-04      5.735e-04</span></a>
-<a class="sourceLine" id="cb15-37" title="37"><span class="co">#&gt; d[8]         -0.1980456 0.21983 5.676e-04      1.265e-03</span></a>
-<a class="sourceLine" id="cb15-38" title="38"><span class="co">#&gt; d[9]          0.0036708 0.03686 9.516e-05      2.166e-04</span></a>
-<a class="sourceLine" id="cb15-39" title="39"><span class="co">#&gt; diff          1.2401442 0.41698 1.077e-03      3.932e-03</span></a>
-<a class="sourceLine" id="cb15-40" title="40"><span class="co">#&gt; direct        1.4039667 0.41237 1.065e-03      3.898e-03</span></a>
-<a class="sourceLine" id="cb15-41" title="41"><span class="co">#&gt; oneminusprob  0.0005733 0.02394 6.181e-05      9.169e-05</span></a>
-<a class="sourceLine" id="cb15-42" title="42"><span class="co">#&gt; prob          0.9994267 0.02394 6.181e-05      9.169e-05</span></a>
-<a class="sourceLine" id="cb15-43" title="43"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-44" title="44"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
-<a class="sourceLine" id="cb15-45" title="45"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-46" title="46"><span class="co">#&gt;                  2.5%      25%       50%      75%     97.5%</span></a>
-<a class="sourceLine" id="cb15-47" title="47"><span class="co">#&gt; d[1]          0.00000  0.00000  0.000000  0.00000  0.000000</span></a>
-<a class="sourceLine" id="cb15-48" title="48"><span class="co">#&gt; d[2]         -0.06129 -0.02232 -0.001955  0.01851  0.057484</span></a>
-<a class="sourceLine" id="cb15-49" title="49"><span class="co">#&gt; d[3]         -0.24582 -0.18950 -0.159967 -0.13080 -0.074811</span></a>
-<a class="sourceLine" id="cb15-50" title="50"><span class="co">#&gt; d[4]         -0.13524 -0.07508 -0.043750 -0.01251  0.046551</span></a>
-<a class="sourceLine" id="cb15-51" title="51"><span class="co">#&gt; d[5]         -0.23217 -0.15356 -0.112824 -0.07185  0.005155</span></a>
-<a class="sourceLine" id="cb15-52" title="52"><span class="co">#&gt; d[6]         -0.30558 -0.20613 -0.154316 -0.10261 -0.003666</span></a>
-<a class="sourceLine" id="cb15-53" title="53"><span class="co">#&gt; d[7]         -0.66296 -0.53187 -0.464229 -0.39603 -0.265450</span></a>
-<a class="sourceLine" id="cb15-54" title="54"><span class="co">#&gt; d[8]         -0.63194 -0.34552 -0.197566 -0.04954  0.233778</span></a>
-<a class="sourceLine" id="cb15-55" title="55"><span class="co">#&gt; d[9]         -0.06885 -0.02104  0.003768  0.02861  0.075637</span></a>
-<a class="sourceLine" id="cb15-56" title="56"><span class="co">#&gt; diff          0.46097  0.95461  1.225416  1.50859  2.101501</span></a>
-<a class="sourceLine" id="cb15-57" title="57"><span class="co">#&gt; direct        0.63558  1.12048  1.389490  1.66994  2.256912</span></a>
-<a class="sourceLine" id="cb15-58" title="58"><span class="co">#&gt; oneminusprob  0.00000  0.00000  0.000000  0.00000  0.000000</span></a>
-<a class="sourceLine" id="cb15-59" title="59"><span class="co">#&gt; prob          1.00000  1.00000  1.000000  1.00000  1.000000</span></a>
-<a class="sourceLine" id="cb15-60" title="60"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-61" title="61"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-62" title="62"><span class="co">#&gt; $deviance</span></a>
-<a class="sourceLine" id="cb15-63" title="63"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb15-64" title="64"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-65" title="65"><span class="co">#&gt; $`Inconsistency estimate`</span></a>
-<a class="sourceLine" id="cb15-66" title="66"><span class="co">#&gt; [1] 1.240144</span></a>
-<a class="sourceLine" id="cb15-67" title="67"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-68" title="68"><span class="co">#&gt; $p_value</span></a>
-<a class="sourceLine" id="cb15-69" title="69"><span class="co">#&gt; [1] 0.001146667</span></a>
-<a class="sourceLine" id="cb15-70" title="70"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-71" title="71"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb15-72" title="72"><span class="co">#&gt; [1] &quot;summary.nodesplit.network.result&quot;</span></a></code></pre></div>
+<p>We included another inconsistency model that can be used to test consistency assumption. Here we can specify a pair where we want to nodesplit and test the inconsistency assumptions. For instance if we specify treatment pair = c(3, 9), we are finding the difference in the direct and indirect evidence of treatment 3 and 9. Inconsistency estimate and the corresponding p-value are reported in the summary. If the p-value is small, it means that we can reject the null hypothesis that direct and indirect evidence agree. We can repeat for all the pairs in the network and identify pairs that might be inconsistent. Refer to Dias et al. 2010 (i.e. Checking consistency in mixed treatment comparison meta-analysis) for more details.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(thrombolytic, <span class="kw">nodesplit.network.data</span>(Outcomes, Study, Treat, N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">pair =</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">9</span>), <span class="dt">type =</span> <span class="st">&quot;fixed&quot;</span>))
+result &lt;-<span class="st"> </span><span class="kw">nodesplit.network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 102</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 59</span>
+<span class="co">#&gt;    Total graph size: 2263</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.001664</span>
+<span class="co">#&gt; [1] 1.000705</span>
+<span class="kw">summary</span>(result)
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                   Mean      SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; d[1]          0.000000 0.00000 0.000e+00      0.0000000</span>
+<span class="co">#&gt; d[2]         -0.001632 0.03012 7.776e-05      0.0001867</span>
+<span class="co">#&gt; d[3]         -0.160106 0.04325 1.117e-04      0.0003501</span>
+<span class="co">#&gt; d[4]         -0.043972 0.04657 1.202e-04      0.0002421</span>
+<span class="co">#&gt; d[5]         -0.112524 0.06012 1.552e-04      0.0004706</span>
+<span class="co">#&gt; d[6]         -0.154435 0.07711 1.991e-04      0.0005689</span>
+<span class="co">#&gt; d[7]         -0.464322 0.10049 2.595e-04      0.0005644</span>
+<span class="co">#&gt; d[8]         -0.201179 0.22047 5.693e-04      0.0012689</span>
+<span class="co">#&gt; d[9]          0.003942 0.03675 9.488e-05      0.0002142</span>
+<span class="co">#&gt; diff          1.245755 0.42146 1.088e-03      0.0040217</span>
+<span class="co">#&gt; direct        1.409803 0.41776 1.079e-03      0.0040097</span>
+<span class="co">#&gt; oneminusprob  0.000700 0.02645 6.829e-05      0.0001187</span>
+<span class="co">#&gt; prob          0.999300 0.02645 6.829e-05      0.0001187</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                  2.5%      25%       50%      75%     97.5%</span>
+<span class="co">#&gt; d[1]          0.00000  0.00000  0.000000  0.00000  0.000000</span>
+<span class="co">#&gt; d[2]         -0.06057 -0.02195 -0.001750  0.01866  0.057675</span>
+<span class="co">#&gt; d[3]         -0.24496 -0.18929 -0.160058 -0.13114 -0.075094</span>
+<span class="co">#&gt; d[4]         -0.13575 -0.07549 -0.043969 -0.01236  0.046797</span>
+<span class="co">#&gt; d[5]         -0.23016 -0.15325 -0.112521 -0.07214  0.005507</span>
+<span class="co">#&gt; d[6]         -0.30519 -0.20676 -0.154438 -0.10253 -0.002451</span>
+<span class="co">#&gt; d[7]         -0.66253 -0.53178 -0.464010 -0.39619 -0.267353</span>
+<span class="co">#&gt; d[8]         -0.63507 -0.34937 -0.200726 -0.05281  0.229222</span>
+<span class="co">#&gt; d[9]         -0.06797 -0.02084  0.004045  0.02872  0.075790</span>
+<span class="co">#&gt; diff          0.46512  0.95607  1.229759  1.51695  2.121032</span>
+<span class="co">#&gt; direct        0.63595  1.12180  1.393070  1.67972  2.276020</span>
+<span class="co">#&gt; oneminusprob  0.00000  0.00000  0.000000  0.00000  0.000000</span>
+<span class="co">#&gt; prob          1.00000  1.00000  1.000000  1.00000  1.000000</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Inconsistency estimate`</span>
+<span class="co">#&gt; [1] 1.245755</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $p_value</span>
+<span class="co">#&gt; [1] 0.0014</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.nodesplit.network.result&quot;</span></code></pre></div>
+</div>
+<div id="finding-risk-difference-and-relative-risk-instead-of-odds-ratio-with-binomial-outcomes" class="section level2">
+<h2>Finding risk difference and relative risk instead of odds ratio with Binomial outcomes</h2>
+<p>We estimate odds ratios using our NMA model, and then we apply these odds ratios to a baseline risk (i.e. risk in placebo) to estimate absolute event rates for all treatments. Using these absolute event rates, we are then able to find number needed to treat, risk difference, and relative risk. Potential caveat of this approach is that we are assuming that relative effects are independent of the absolute effects for the reference treatment.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Using metaprop function from meta package, we meta-analyze placebo event proportion.</span>
+<span class="co">#library(meta)</span>
+<span class="co">#placebo_index &lt;- which(certolizumab$Treat == &quot;Placebo&quot;)</span>
+<span class="co">#meta.pla &lt;- metaprop(event = certolizumab$Outcomes[placebo_index], n = certolizumab$N[placebo_index], method = &quot;GLMM&quot;, sm = &quot;PLOGIT&quot;)</span>
+<span class="co">#mean.A = meta.pla$TE.random; prec.A = 1/meta.pla$tau^2</span>
+
+network &lt;-<span class="st"> </span><span class="kw">with</span>(certolizumab, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Treat =</span> Treat, <span class="dt">Study =</span> Study, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">mean.A =</span> <span class="op">-</span><span class="fl">2.27</span>, <span class="dt">prec.A =</span> <span class="fl">2.53</span>))
+result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
+<span class="co">#&gt; Compiling model graph</span>
+<span class="co">#&gt;    Resolving undeclared variables</span>
+<span class="co">#&gt;    Allocating nodes</span>
+<span class="co">#&gt; Graph information:</span>
+<span class="co">#&gt;    Observed stochastic nodes: 24</span>
+<span class="co">#&gt;    Unobserved stochastic nodes: 32</span>
+<span class="co">#&gt;    Total graph size: 649</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Initializing model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [1] 1.011156</span>
+<span class="co">#&gt; [1] 1.005806</span>
+<span class="kw">summary</span>(result, <span class="dt">extra.pars =</span> <span class="kw">c</span>(<span class="st">&quot;RD&quot;</span>, <span class="st">&quot;RR&quot;</span>))
+<span class="co">#&gt; $summary.samples</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Iterations = 1:50000</span>
+<span class="co">#&gt; Thinning interval = 1 </span>
+<span class="co">#&gt; Number of chains = 3 </span>
+<span class="co">#&gt; Sample size per chain = 50000 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
+<span class="co">#&gt;    plus standard error of the mean:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;            Mean      SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; RD[1]  0.000000 0.00000 0.0000000      0.0000000</span>
+<span class="co">#&gt; RD[2]  0.070699 0.14675 0.0003789      0.0009537</span>
+<span class="co">#&gt; RD[3]  0.263177 0.28061 0.0007245      0.0025460</span>
+<span class="co">#&gt; RD[4]  0.008845 0.12748 0.0003292      0.0011310</span>
+<span class="co">#&gt; RD[5] -0.085987 0.05522 0.0001426      0.0002252</span>
+<span class="co">#&gt; RD[6] -0.067262 0.09787 0.0002527      0.0005721</span>
+<span class="co">#&gt; RD[7] -0.011156 0.10644 0.0002748      0.0006734</span>
+<span class="co">#&gt; RR[1]  1.000000 0.00000 0.0000000      0.0000000</span>
+<span class="co">#&gt; RR[2]  1.775129 1.76620 0.0045603      0.0114626</span>
+<span class="co">#&gt; RR[3]  4.071673 4.11618 0.0106279      0.0316064</span>
+<span class="co">#&gt; RR[4]  1.141033 1.51683 0.0039164      0.0128433</span>
+<span class="co">#&gt; RR[5]  0.194868 0.28604 0.0007385      0.0020572</span>
+<span class="co">#&gt; RR[6]  0.391111 1.06760 0.0027565      0.0064376</span>
+<span class="co">#&gt; RR[7]  0.930839 1.22642 0.0031666      0.0079224</span>
+<span class="co">#&gt; d[1]   0.000000 0.00000 0.0000000      0.0000000</span>
+<span class="co">#&gt; d[2]   0.354207 1.11818 0.0028871      0.0066660</span>
+<span class="co">#&gt; d[3]   1.489499 1.90566 0.0049204      0.0161439</span>
+<span class="co">#&gt; d[4]  -0.231749 1.05606 0.0027267      0.0082425</span>
+<span class="co">#&gt; d[5]  -1.991867 0.70349 0.0018164      0.0054202</span>
+<span class="co">#&gt; d[6]  -1.984631 1.52260 0.0039313      0.0090483</span>
+<span class="co">#&gt; d[7]  -0.492933 1.11085 0.0028682      0.0067660</span>
+<span class="co">#&gt; sd     0.942261 0.66094 0.0017065      0.0104908</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; 2. Quantiles for each variable:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;            2.5%      25%      50%      75%    97.5%</span>
+<span class="co">#&gt; RD[1]  0.000000  0.00000  0.00000  0.00000  0.00000</span>
+<span class="co">#&gt; RD[2] -0.101279 -0.01292  0.02957  0.10710  0.50530</span>
+<span class="co">#&gt; RD[3] -0.097338  0.02694  0.18451  0.47075  0.85234</span>
+<span class="co">#&gt; RD[4] -0.128777 -0.04841 -0.02057  0.01786  0.40019</span>
+<span class="co">#&gt; RD[5] -0.214319 -0.11197 -0.07645 -0.05082 -0.01904</span>
+<span class="co">#&gt; RD[6] -0.214442 -0.10662 -0.06911 -0.04089  0.13017</span>
+<span class="co">#&gt; RD[7] -0.146071 -0.05714 -0.02691  0.00348  0.27457</span>
+<span class="co">#&gt; RR[1]  1.000000  1.00000  1.00000  1.00000  1.00000</span>
+<span class="co">#&gt; RR[2]  0.167443  0.84313  1.34117  2.08997  6.27160</span>
+<span class="co">#&gt; RR[3]  0.154427  1.32019  2.89650  5.45415 14.89009</span>
+<span class="co">#&gt; RR[4]  0.141632  0.47682  0.73159  1.20613  4.92293</span>
+<span class="co">#&gt; RR[5]  0.035642  0.10740  0.15252  0.21253  0.58419</span>
+<span class="co">#&gt; RR[6]  0.007274  0.06739  0.15291  0.33843  2.34806</span>
+<span class="co">#&gt; RR[7]  0.066989  0.39033  0.65818  1.04271  3.70212</span>
+<span class="co">#&gt; d[1]   0.000000  0.00000  0.00000  0.00000  0.00000</span>
+<span class="co">#&gt; d[2]  -1.883565 -0.18987  0.33718  0.88235  2.65412</span>
+<span class="co">#&gt; d[3]  -1.965639  0.31962  1.36055  2.54410  5.58998</span>
+<span class="co">#&gt; d[4]  -2.052482 -0.80223 -0.34542  0.21397  2.22448</span>
+<span class="co">#&gt; d[5]  -3.441462 -2.33173 -1.97880 -1.64351 -0.58831</span>
+<span class="co">#&gt; d[6]  -5.033796 -2.80454 -1.97838 -1.16276  1.03514</span>
+<span class="co">#&gt; d[7]  -2.800080 -1.01161 -0.46079  0.04705  1.68809</span>
+<span class="co">#&gt; sd     0.120649  0.50606  0.78952  1.19148  2.71808</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Treat.order</span>
+<span class="co">#&gt;             1             2             3             4             5 </span>
+<span class="co">#&gt;  &quot;Adalimumab&quot;         &quot;CZP&quot;  &quot;Etanercept&quot;  &quot;Infliximab&quot;     &quot;Placebo&quot; </span>
+<span class="co">#&gt;             6             7 </span>
+<span class="co">#&gt;   &quot;Rituximab&quot; &quot;Tocilizumab&quot; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $deviance</span>
+<span class="co">#&gt;     Dbar       pD      DIC </span>
+<span class="co">#&gt; 27.02814 22.66387 49.69201 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $total_n</span>
+<span class="co">#&gt; [1] 24</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></code></pre></div>
 </div>
 
 

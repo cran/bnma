@@ -72,3 +72,14 @@ network <- with(thrombolytic, nodesplit.network.data(Outcomes, Study, Treat, N, 
 result <- nodesplit.network.run(network)
 summary(result)
 
+## -----------------------------------------------------------------------------
+#Using metaprop function from meta package, we meta-analyze placebo event proportion.
+#library(meta)
+#placebo_index <- which(certolizumab$Treat == "Placebo")
+#meta.pla <- metaprop(event = certolizumab$Outcomes[placebo_index], n = certolizumab$N[placebo_index], method = "GLMM", sm = "PLOGIT")
+#mean.A = meta.pla$TE.random; prec.A = 1/meta.pla$tau^2
+
+network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", mean.A = -2.27, prec.A = 2.53))
+result <- network.run(network)
+summary(result, extra.pars = c("RD", "RR"))
+
