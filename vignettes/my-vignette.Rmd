@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-We describe how to run Bayesian network meta analysis using this package. First we'll need to load the package.
+In this vignette, we describe how to run a Bayesian network meta-analysis model using this package. First we'll need to load the package.
 
 ```{r}
 #install.packages("bnma")
@@ -28,8 +28,7 @@ library(bnma)
 
 ## Preprocessing
 
-It is essential to specify the input data in a correct format. We have chosen to use arm-level data with following input variable names: Outcomes, N or SE, Study, and Treat. Outcomes is the trial results. N is the number of respondents used for binary or multinomial model. SE is the standard error used for normal model. Study is the study indicator for the meta analysis. Lastly, Treat is the treatment indicator for each arm. We use a dataset `parkinsons` for illustration.
-
+It is essential to specify the input data in a correct format. We have chosen to use arm-level data with following input variable names: Outcomes, N or SE, Study, and Treat. Outcomes is the trial results. N is the number of respondents used for binary or multinomial model. SE is the standard error used for normal model. Study is the study indicator for the meta analysis. Lastly, Treat is the treatment indicator for each arm. We will use a dataset `parkinsons` for illustration.
 
 ```{r}
 parkinsons
@@ -81,7 +80,7 @@ network.forest.plot(result)
 
 ## Multinomial model
 
-Another nice feature of this network meta analysis package is that multinomial outcome dataset can be analyzed. Here is an example.
+Another nice feature of this package is that multinomial outcome dataset can be analyzed. Here is an example.
 
 ```{r}
 network <- with(cardiovascular, network.data(Outcomes, Study, Treat, N, response = "multinomial"))
@@ -116,18 +115,6 @@ result <- network.run(network)
 summary(result)
 ```
 
-## Contrast data
-
-We also added model to analyze contrast-level data instead of arms-level data. Contrast level format uses treatment differences relative to the control arms.
-
-```{r}
-network <- with(parkinsons_contrast, {
-  contrast.network.data(Outcomes, Treat, SE, na, V, type = "random", mean.d = 0.01, prec.d = 0.1, hy.prior = list("dhnorm", 0.01, 0.01))
-})
-result <- contrast.network.run(network)
-summary(result)
-```
-
 ## Unrelated Means Model
 
 Unrelated mean effects (UME) model estimates separate, unrelated basic parameters. We do not assume consistency in this model. We can compare this model with the standard consistency model. If the parameter estimates are similar for both models, and there is considerable overlap in the 95% credible interval, we can conclude that there is no evidence of inconsistency in the network.
@@ -153,7 +140,7 @@ summary(result)
 
 ## Finding risk difference and relative risk instead of odds ratio with Binomial outcomes
 
-We estimate odds ratios using our NMA model, and then we apply these odds ratios to a baseline risk (i.e. risk in placebo) to estimate absolute event rates for all treatments. Using these absolute event rates, we are then able to find number needed to treat, risk difference, and relative risk. Potential caveat of this approach is that we are assuming that relative effects are independent of the absolute effects for the reference treatment. 
+We estimate odds ratios using our NMA model, and then we apply these odds ratios to a baseline risk (i.e. risk in placebo) to estimate absolute event rates for all treatments. Using these absolute event rates, we are then able to find number needed to treat, risk difference, and relative risk.
 
 ```{r}
 #Using metaprop function from meta package, we meta-analyze placebo event proportion.

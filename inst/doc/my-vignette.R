@@ -54,13 +54,6 @@ result <- network.run(network)
 summary(result)
 
 ## -----------------------------------------------------------------------------
-network <- with(parkinsons_contrast, {
-  contrast.network.data(Outcomes, Treat, SE, na, V, type = "random", mean.d = 0.01, prec.d = 0.1, hy.prior = list("dhnorm", 0.01, 0.01))
-})
-result <- contrast.network.run(network)
-summary(result)
-
-## -----------------------------------------------------------------------------
 network <- with(smoking, {
   ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
 })

@@ -1,6 +1,6 @@
-a925c1ddda22b1f40f69215ac286bb9c *DESCRIPTION
+7155ae7cceae1ce2dd99e1debfa9ada7 *DESCRIPTION
 b701082a7beb54dc4a00e85d19db6a86 *NAMESPACE
-38350830c014b7687e836dd2ab962272 *NEWS.md
+1883533e5fa79c3263aa9812d9d30f87 *NEWS.md
 5722048ca241aa7ee2a33d8627a261e9 *R/bnma.R
 103124c94e5c4469b126dd68d71f867f *R/contrast.network.R
 4556b6942197892584304c0af6221637 *R/network.data.R
@@ -12,6 +12,7 @@ ea3c32b7738d066e442e93ee89229d0b *R/network.rjags.R
 28ef9e677f6655bcf97adb904a9e54b5 *R/nodesplit.network.R
 2bdbff34f5473ca312d2b7d4a459bc0b *R/preprocess.data.R
 3795797e3512db083d39d5b41261034c *R/ume.network.R
+35a8ccd31c0419d30721948fb8206f02 *README.md
 284e88fed97761581c88835c3a8ccefe *build/vignette.rds
 db2c105dc8084901ad49995ca19544d0 *data/blocker.rda
 3e552499471431bd80558690a44919fc *data/cardiovascular.rda
@@ -21,9 +22,9 @@ ffd090cf238cbff9444538b6e1331984 *data/parkinsons.rda
 e189a0340dc52322c0d186d1add1ad6f *data/smoking.rda
 7f93040d8f46b1d0f6b6a7225be11a5c *data/statins.rda
 2ccd731d2efd71aa1d03f7c4495bbf07 *data/thrombolytic.rda
-b85f1d61598c8895a92a004f3a9aac4d *inst/doc/my-vignette.R
-a2d5f8c0f86ca1ace224d9c5fd6fd93c *inst/doc/my-vignette.Rmd
-5b695c291a58a1f33f7ef796fe9ff201 *inst/doc/my-vignette.html
+afe06f6520e856cf782276cac58c73c3 *inst/doc/my-vignette.R
+1281388b7f41d970a8e2f0163c8a2a5f *inst/doc/my-vignette.Rmd
+481a0d715aea681efe1e0f2b5ecb437b *inst/doc/my-vignette.html
 f9311e9d667873ce0f5ed4519c051698 *man/blocker.Rd
 b087be719f9845097b846c8c4b5dd6f2 *man/bnma-package.Rd
 114d7af4ec72fa1e75bf46bbc6d8f4d1 *man/calculate.contrast.deviance.Rd
@@ -68,4 +69,4 @@ f00217f0b310e6559a1222ba0e39cebf *man/summary.contrast.network.result.Rd
 0160f790393f447eccccfe5b3afd60b5 *man/ume.network.data.Rd
 908da51376acac2d76c38d2537f91ba1 *man/ume.network.run.Rd
 9604768f595c28a3578129a39c008fec *man/variance.tx.effects.Rd
-a2d5f8c0f86ca1ace224d9c5fd6fd93c *vignettes/my-vignette.Rmd
+1281388b7f41d970a8e2f0163c8a2a5f *vignettes/my-vignette.Rmd
