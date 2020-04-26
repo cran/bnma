@@ -12,7 +12,7 @@
 
 <meta name="author" content="Michael Seo and Christopher Schmid" />
 
-<meta name="date" content="2020-04-22" />
+<meta name="date" content="2020-04-26" />
 
 <title>Bayesian network meta analysis</title>
 
@@ -95,11 +95,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bayesian network meta analysis</h1>
 <h4 class="author">Michael Seo and Christopher Schmid</h4>
-<h4 class="date">2020-04-22</h4>
+<h4 class="date">2020-04-26</h4>
 
 
 
-<p>In this vignette, we describe how to run a Bayesian network meta-analysis model using this package. First we’ll need to load the package.</p>
+<p>In this vignette, we describe how to run a Bayesian network meta-analysis model using this package. First, we’ll need to load the package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&quot;bnma&quot;)</span>
 <span class="co">#or devtools::install_github(&quot;MikeJSeo/bnma&quot;)</span>
 <span class="kw">library</span>(bnma)</code></pre></div>
@@ -127,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $Treat.order</span>
 <span class="co">#&gt; [1] &quot;Placebo&quot;       &quot;Pramipexole&quot;   &quot;Ropinirole&quot;    &quot;Bromocriptine&quot;</span>
 <span class="co">#&gt; [5] &quot;Cabergoline&quot;</span></code></pre></div>
-<p>In order to run network meta analysis in JAGS, we need to relabel study names into to a numeric sequence, i.e. 1 to total number of studies, and relabel the treatment into a numeric sequence according to treatment order specified. If treatment order is not specified, default is to use alphabetical order. In the example below, we set placebo as the baseline treatment followed by Pramipexole, Ropinirole, Bromocriptine, and Cabergoline as the treatment order.</p>
+<p>In order to run network meta-analysis in JAGS, we need to relabel study names into to a numeric sequence, i.e. 1 to total number of studies, and relabel the treatment into a numeric sequence according to treatment order specified. If the treatment order is not specified, default is to use the alphabetical order. In the example below, we set placebo as the baseline treatment followed by Pramipexole, Ropinirole, Bromocriptine, and Cabergoline as the treatment order.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(parkinsons, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">SE =</span> SE, <span class="dt">response =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">Treat.order =</span> Treat.order))
 network<span class="op">$</span>Treat.order 
 <span class="co">#&gt;               1               2               3               4               5 </span>
@@ -135,7 +135,7 @@ network<span class="op">$</span>Treat.order
 network<span class="op">$</span>Study.order
 <span class="co">#&gt; 1 2 3 4 5 6 7 </span>
 <span class="co">#&gt; 1 2 3 4 5 6 7</span></code></pre></div>
-<p>Another important preprocessing step that is done through <code>network.data</code> function is to change the arm-level data into study-level data. We store the study-level data of Outcomes as r, Treat as t, N or SE as n or se. We can see how Outcomes changed into a matrix given below. Similarly, if the Outcomes are multinomial, it will change to a 3 dimensional array.</p>
+<p>Another important preprocessing step that is done in <code>network.data</code> function is changing the arm-level data into study-level data. We store the study-level data of Outcomes as r, Treat as t, N or SE as n or se. We can see how Outcomes changed into a study-level matrix given below (i.e. row = study). If the Outcomes are multinomial, it will change to a 3 dimensional array.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network<span class="op">$</span>r
 <span class="co">#&gt;       [,1]  [,2] [,3]</span>
 <span class="co">#&gt; [1,] -1.22 -1.53   NA</span>
@@ -148,12 +148,12 @@ network<span class="op">$</span>Study.order
 </div>
 <div id="priors" class="section level2">
 <h2>Priors</h2>
-<p>Priors can be set in the <code>network.data</code> function. Please take a look at the function description for the prior specifications. For heterogeneity parameters of the random effects model, we follow the data format from a similar Bayesian network meta-analysis R package <code>gemtc</code>. It should be a list of length 3 where first element should be the distribution (one of dunif, dgamma, dhnorm, dwish) and the next two are the parameters associated with the distribution. Here is an example.</p>
+<p>Priors can be set in the <code>network.data</code> function. If left unspecified, default values are used. For heterogeneity parameters of the random effects model, we follow the data format from a similar Bayesian network meta-analysis R package <code>gemtc</code>. It should be a list of length 3 where the first element should be the distribution (one of dunif, dgamma, dhnorm, dwish) and the next two are the parameters associated with the distribution. Here is an example of assigning a half-normal distribution with mean 0 and standard deviation 5.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(smoking, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Study =</span> Study, <span class="dt">Treat =</span> Treat, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">mean.d =</span> <span class="fl">0.1</span>, <span class="dt">hy.prior =</span> <span class="kw">list</span>(<span class="st">&quot;dhnorm&quot;</span>, <span class="dv">0</span>, <span class="dv">5</span>)))</code></pre></div>
 </div>
 <div id="running-the-model" class="section level2">
 <h2>Running the model</h2>
-<p>Now to run the network, we use the function <code>network.run</code>. There are many parameters that can be modified, but the most important is the parameter <code>n.run</code> which determines how many final observations the user wants. Gelman-Rubin statitics is checked automatically every <code>setsize</code> number of iterations and once the series have converged we store the last half of the sequence. If the number of iteration is less than the number of observations user wanted (<code>n.runs</code>), it will sample more to fill the requirement. One of the nice feature of this package is that it checks for convergence automatically and will give an error if the sequence has not converged. The parameters tested for convergence are the relative treatment effects, baseline effect, and heterogeneity parameter. The number that is printed during the running of the model is the point estimate of the Gelman-Rubin statistics.</p>
+<p>Now to run the model, we use the function <code>network.run</code>. The most important parameter is <code>n.run</code> which determines the number of final samples the user wants. Gelman-Rubin statitics is checked automatically every <code>setsize</code> number of iterations and once the series have converged we store the last half of the sequence. If the number of iteration is less than the number of final samples (<code>n.runs</code>), it will sample more to fill the requirement. One of the nice features of this package is that it checks for convergence automatically and will give an error if the sequence has not converged. The parameters tested for convergence are the relative treatment effects, baseline effect, and heterogeneity parameter. The number that is printed during the running of the model is the point estimate of the Gelman-Rubin statistics used to test convergence.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network, <span class="dt">n.run =</span> <span class="dv">30000</span>)
 <span class="co">#&gt; Compiling model graph</span>
 <span class="co">#&gt;    Resolving undeclared variables</span>
@@ -168,14 +168,14 @@ network<span class="op">$</span>Study.order
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.004027</span>
-<span class="co">#&gt; [1] 1.002172</span></code></pre></div>
+<span class="co">#&gt; [1] 1.002663</span>
+<span class="co">#&gt; [1] 1.00121</span></code></pre></div>
 </div>
 <div id="model-summary" class="section level2">
 <h2>Model Summary</h2>
-<p>Package includes many summary tools that can be used. One of the more useful summary might be the forest plot. Please look over the R package guide for more possible options.</p>
+<p>Package includes many summary tools that can be used. One of the useful summary might be the forest plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">network.forest.plot</span>(result)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># draw.network.graph(network)</span>
 <span class="co"># network.autocorr.diag(result)</span>
 <span class="co"># network.autocorr.plot(result)</span>
@@ -185,7 +185,7 @@ network<span class="op">$</span>Study.order
 </div>
 <div id="multinomial-model" class="section level2">
 <h2>Multinomial model</h2>
-<p>Another nice feature of this package is that multinomial outcome dataset can be analyzed. Here is an example.</p>
+<p>Another nice addition of this package is that multinomial outcome dataset can be analyzed. Here is an example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(cardiovascular, <span class="kw">network.data</span>(Outcomes, Study, Treat, N, <span class="dt">response =</span> <span class="st">&quot;multinomial&quot;</span>))
 result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
 <span class="co">#&gt; Compiling model graph</span>
@@ -201,8 +201,8 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.007242</span>
-<span class="co">#&gt; [1] 1.002173</span>
+<span class="co">#&gt; [1] 1.006646</span>
+<span class="co">#&gt; [1] 1.001987</span>
 <span class="kw">summary</span>(result)
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
@@ -216,29 +216,29 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt;                 Mean      SD  Naive SE Time-series SE</span>
 <span class="co">#&gt; d[1,1]      0.000000 0.00000 0.000e+00      0.0000000</span>
-<span class="co">#&gt; d[2,1]     -0.104674 0.15261 3.940e-04      0.0011630</span>
-<span class="co">#&gt; d[3,1]     -0.046890 0.11262 2.908e-04      0.0007079</span>
+<span class="co">#&gt; d[2,1]     -0.106368 0.15151 3.912e-04      0.0011008</span>
+<span class="co">#&gt; d[3,1]     -0.047469 0.11240 2.902e-04      0.0007003</span>
 <span class="co">#&gt; d[1,2]      0.000000 0.00000 0.000e+00      0.0000000</span>
-<span class="co">#&gt; d[2,2]     -0.187270 0.15328 3.958e-04      0.0011135</span>
-<span class="co">#&gt; d[3,2]     -0.270766 0.11238 2.902e-04      0.0006733</span>
-<span class="co">#&gt; sigma[1,1]  0.114936 0.05077 1.311e-04      0.0002453</span>
-<span class="co">#&gt; sigma[2,1]  0.004613 0.03440 8.881e-05      0.0001620</span>
-<span class="co">#&gt; sigma[1,2]  0.004613 0.03440 8.881e-05      0.0001620</span>
-<span class="co">#&gt; sigma[2,2]  0.114358 0.05034 1.300e-04      0.0002431</span>
+<span class="co">#&gt; d[2,2]     -0.189404 0.15397 3.976e-04      0.0012135</span>
+<span class="co">#&gt; d[3,2]     -0.271122 0.11283 2.913e-04      0.0006862</span>
+<span class="co">#&gt; sigma[1,1]  0.114968 0.05113 1.320e-04      0.0002364</span>
+<span class="co">#&gt; sigma[2,1]  0.004802 0.03461 8.937e-05      0.0001605</span>
+<span class="co">#&gt; sigma[1,2]  0.004802 0.03461 8.937e-05      0.0001605</span>
+<span class="co">#&gt; sigma[2,2]  0.114458 0.05043 1.302e-04      0.0002316</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;                2.5%      25%       50%       75%    97.5%</span>
 <span class="co">#&gt; d[1,1]      0.00000  0.00000  0.000000  0.000000  0.00000</span>
-<span class="co">#&gt; d[2,1]     -0.40375 -0.20472 -0.105453 -0.005514  0.19848</span>
-<span class="co">#&gt; d[3,1]     -0.27069 -0.12058 -0.046521  0.026790  0.17511</span>
+<span class="co">#&gt; d[2,1]     -0.40207 -0.20581 -0.107577 -0.007417  0.19370</span>
+<span class="co">#&gt; d[3,1]     -0.27101 -0.12059 -0.047137  0.025835  0.17379</span>
 <span class="co">#&gt; d[1,2]      0.00000  0.00000  0.000000  0.000000  0.00000</span>
-<span class="co">#&gt; d[2,2]     -0.49310 -0.28755 -0.185594 -0.085904  0.11160</span>
-<span class="co">#&gt; d[3,2]     -0.49487 -0.34371 -0.270023 -0.197226 -0.05051</span>
-<span class="co">#&gt; sigma[1,1]  0.05195  0.08065  0.103866  0.136225  0.24338</span>
-<span class="co">#&gt; sigma[2,1] -0.06346 -0.01433  0.003861  0.022728  0.07665</span>
-<span class="co">#&gt; sigma[1,2] -0.06346 -0.01433  0.003861  0.022728  0.07665</span>
-<span class="co">#&gt; sigma[2,2]  0.05183  0.08014  0.103304  0.135678  0.24196</span>
+<span class="co">#&gt; d[2,2]     -0.49761 -0.28897 -0.188267 -0.087637  0.11097</span>
+<span class="co">#&gt; d[3,2]     -0.49511 -0.34415 -0.270527 -0.197860 -0.04941</span>
+<span class="co">#&gt; sigma[1,1]  0.05184  0.08052  0.103912  0.136425  0.24329</span>
+<span class="co">#&gt; sigma[2,1] -0.06345 -0.01396  0.004046  0.022782  0.07697</span>
+<span class="co">#&gt; sigma[1,2] -0.06345 -0.01396  0.004046  0.022782  0.07697</span>
+<span class="co">#&gt; sigma[2,2]  0.05199  0.08043  0.103439  0.135678  0.24193</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Treat.order</span>
@@ -247,7 +247,7 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $deviance</span>
 <span class="co">#&gt;     Dbar       pD      DIC </span>
-<span class="co">#&gt; 31.17295 60.41655 91.58951 </span>
+<span class="co">#&gt; 31.10014 60.37601 91.47615 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $total_n</span>
 <span class="co">#&gt; [1] 34</span>
@@ -257,7 +257,7 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 </div>
 <div id="adding-covariates" class="section level2">
 <h2>Adding covariates</h2>
-<p>We can add continuous or discrete covariates to fit a network meta regression. If the covariate is continuous, it is centered. Discrete variables need to be 0-1 dummy format. There are three different assumptions for covariate effect: “common”, “independent”, and “exchangeable”.</p>
+<p>We can add continuous or discrete covariates to fit a network meta-regression. If the covariate is continuous, it is centered. Discrete variables need to be 0-1 dummy format. There are three different assumptions for covariate effect: “common”, “independent”, and “exchangeable”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(statins, <span class="kw">network.data</span>(Outcomes, Study, Treat, <span class="dt">N=</span>N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> <span class="kw">c</span>(<span class="st">&quot;Placebo&quot;</span>, <span class="st">&quot;Statin&quot;</span>), <span class="dt">covariate =</span> covariate, <span class="dt">covariate.type =</span> <span class="st">&quot;discrete&quot;</span>, <span class="dt">covariate.model =</span> <span class="st">&quot;common&quot;</span>))
 result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
 <span class="co">#&gt; Compiling model graph</span>
@@ -273,8 +273,8 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.008697</span>
-<span class="co">#&gt; [1] 1.00874</span>
+<span class="co">#&gt; [1] 1.016102</span>
+<span class="co">#&gt; [1] 1.007435</span>
 <span class="kw">summary</span>(result)
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
@@ -288,19 +288,19 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt;              Mean     SD  Naive SE Time-series SE</span>
 <span class="co">#&gt; beta1[1]  0.00000 0.0000 0.0000000       0.000000</span>
-<span class="co">#&gt; beta1[2] -0.29681 0.2652 0.0006848       0.003555</span>
+<span class="co">#&gt; beta1[2] -0.30726 0.2604 0.0006723       0.003691</span>
 <span class="co">#&gt; d[1]      0.00000 0.0000 0.0000000       0.000000</span>
-<span class="co">#&gt; d[2]     -0.06898 0.2092 0.0005401       0.002626</span>
-<span class="co">#&gt; sd        0.24437 0.2113 0.0005457       0.005935</span>
+<span class="co">#&gt; d[2]     -0.06099 0.2059 0.0005316       0.002664</span>
+<span class="co">#&gt; sd        0.24071 0.2026 0.0005231       0.005585</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;               2.5%      25%      50%      75%  97.5%</span>
-<span class="co">#&gt; beta1[1]  0.000000  0.00000  0.00000  0.00000 0.0000</span>
-<span class="co">#&gt; beta1[2] -0.888860 -0.42489 -0.27605 -0.14883 0.1918</span>
-<span class="co">#&gt; d[1]      0.000000  0.00000  0.00000  0.00000 0.0000</span>
-<span class="co">#&gt; d[2]     -0.479454 -0.17981 -0.07414  0.03424 0.3767</span>
-<span class="co">#&gt; sd        0.007239  0.08962  0.18958  0.33895 0.7949</span>
+<span class="co">#&gt;              2.5%      25%      50%      75%  97.5%</span>
+<span class="co">#&gt; beta1[1]  0.00000  0.00000  0.00000  0.00000 0.0000</span>
+<span class="co">#&gt; beta1[2] -0.89142 -0.43875 -0.28670 -0.15841 0.1709</span>
+<span class="co">#&gt; d[1]      0.00000  0.00000  0.00000  0.00000 0.0000</span>
+<span class="co">#&gt; d[2]     -0.45724 -0.17363 -0.06951  0.04338 0.3820</span>
+<span class="co">#&gt; sd        0.01097  0.09098  0.18842  0.33634 0.7657</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Treat.order</span>
@@ -309,20 +309,20 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $deviance</span>
 <span class="co">#&gt;     Dbar       pD      DIC </span>
-<span class="co">#&gt; 42.63374 25.12265 67.75640 </span>
+<span class="co">#&gt; 42.64887 25.07258 67.72145 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $total_n</span>
 <span class="co">#&gt; [1] 38</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;summary.network.result&quot;</span></code></pre></div>
-<p>Covariate plot shows you how the relative effect changes as the covariate varies.</p>
+<p>Covariate plot shows you how the relative treatment effect changes as the covariate varies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">network.covariate.plot</span>(result, <span class="dt">base.treatment =</span> <span class="st">&quot;Placebo&quot;</span>, <span class="dt">comparison.treatment =</span> <span class="st">&quot;Statin&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="baseline-risk" class="section level2">
 <h2>Baseline risk</h2>
-<p>Another useful addition to this network package is the ability to add baseline risk. We can have “common”, “independent”, or “exchangeable” assumption on the baseline slopes and “independenet” and “exchangeable” assumption on the baseline risk. Here we demonstrate a common slope and exchangeable baseline risk model.</p>
+<p>Another useful addition of this network package is the ability to model baseline risk. We can have “common”, “independent”, or “exchangeable” assumption on the baseline slopes and “independenet” and “exchangeable” assumption on the baseline risk. Here we demonstrate a common baseline slope and exchangeable baseline risk model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">network &lt;-<span class="st"> </span><span class="kw">with</span>(certolizumab, <span class="kw">network.data</span>(<span class="dt">Outcomes =</span> Outcomes, <span class="dt">Treat =</span> Treat, <span class="dt">Study =</span> Study, <span class="dt">N =</span> N, <span class="dt">response =</span> <span class="st">&quot;binomial&quot;</span>, <span class="dt">Treat.order =</span> Treat.order, <span class="dt">baseline =</span> <span class="st">&quot;common&quot;</span>, <span class="dt">baseline.risk =</span> <span class="st">&quot;exchangeable&quot;</span>))
 result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network)
 <span class="co">#&gt; Compiling model graph</span>
@@ -338,8 +338,8 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.01313</span>
-<span class="co">#&gt; [1] 1.051768</span>
+<span class="co">#&gt; [1] 1.021987</span>
+<span class="co">#&gt; [1] 1.012039</span>
 <span class="kw">summary</span>(result)
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
@@ -352,42 +352,42 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt;    plus standard error of the mean:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span>
-<span class="co">#&gt; B       -0.7791 0.2927 0.0007558       0.003959</span>
+<span class="co">#&gt; B       -0.7683 0.2721 0.0007025       0.004213</span>
 <span class="co">#&gt; b_bl[1]  0.0000 0.0000 0.0000000       0.000000</span>
-<span class="co">#&gt; b_bl[2] -0.7791 0.2927 0.0007558       0.003959</span>
-<span class="co">#&gt; b_bl[3] -0.7791 0.2927 0.0007558       0.003959</span>
-<span class="co">#&gt; b_bl[4] -0.7791 0.2927 0.0007558       0.003959</span>
-<span class="co">#&gt; b_bl[5] -0.7791 0.2927 0.0007558       0.003959</span>
-<span class="co">#&gt; b_bl[6] -0.7791 0.2927 0.0007558       0.003959</span>
-<span class="co">#&gt; b_bl[7] -0.7791 0.2927 0.0007558       0.003959</span>
+<span class="co">#&gt; b_bl[2] -0.7683 0.2721 0.0007025       0.004213</span>
+<span class="co">#&gt; b_bl[3] -0.7683 0.2721 0.0007025       0.004213</span>
+<span class="co">#&gt; b_bl[4] -0.7683 0.2721 0.0007025       0.004213</span>
+<span class="co">#&gt; b_bl[5] -0.7683 0.2721 0.0007025       0.004213</span>
+<span class="co">#&gt; b_bl[6] -0.7683 0.2721 0.0007025       0.004213</span>
+<span class="co">#&gt; b_bl[7] -0.7683 0.2721 0.0007025       0.004213</span>
 <span class="co">#&gt; d[1]     0.0000 0.0000 0.0000000       0.000000</span>
-<span class="co">#&gt; d[2]     1.8640 0.2615 0.0006751       0.001863</span>
-<span class="co">#&gt; d[3]     2.1338 0.2259 0.0005832       0.002010</span>
-<span class="co">#&gt; d[4]     2.0206 0.4537 0.0011715       0.005449</span>
-<span class="co">#&gt; d[5]     1.6344 0.2207 0.0005699       0.001900</span>
-<span class="co">#&gt; d[6]     0.3057 0.5967 0.0015407       0.009141</span>
-<span class="co">#&gt; d[7]     2.1505 0.3181 0.0008214       0.002861</span>
-<span class="co">#&gt; sd       0.1990 0.2232 0.0005762       0.007746</span>
+<span class="co">#&gt; d[2]     1.8698 0.2266 0.0005850       0.001993</span>
+<span class="co">#&gt; d[3]     2.1339 0.2079 0.0005369       0.002326</span>
+<span class="co">#&gt; d[4]     2.0370 0.4216 0.0010885       0.005814</span>
+<span class="co">#&gt; d[5]     1.6305 0.2011 0.0005192       0.002155</span>
+<span class="co">#&gt; d[6]     0.2958 0.5951 0.0015365       0.010198</span>
+<span class="co">#&gt; d[7]     2.1441 0.2842 0.0007337       0.003005</span>
+<span class="co">#&gt; sd       0.1864 0.1705 0.0004401       0.003481</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;              2.5%      25%     50%     75%   97.5%</span>
-<span class="co">#&gt; B       -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
+<span class="co">#&gt; B       -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
 <span class="co">#&gt; b_bl[1]  0.000000  0.00000  0.0000  0.0000  0.0000</span>
-<span class="co">#&gt; b_bl[2] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
-<span class="co">#&gt; b_bl[3] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
-<span class="co">#&gt; b_bl[4] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
-<span class="co">#&gt; b_bl[5] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
-<span class="co">#&gt; b_bl[6] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
-<span class="co">#&gt; b_bl[7] -1.299294 -0.92472 -0.7875 -0.6384 -0.2208</span>
+<span class="co">#&gt; b_bl[2] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
+<span class="co">#&gt; b_bl[3] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
+<span class="co">#&gt; b_bl[4] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
+<span class="co">#&gt; b_bl[5] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
+<span class="co">#&gt; b_bl[6] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
+<span class="co">#&gt; b_bl[7] -1.280651 -0.91870 -0.7815 -0.6284 -0.1997</span>
 <span class="co">#&gt; d[1]     0.000000  0.00000  0.0000  0.0000  0.0000</span>
-<span class="co">#&gt; d[2]     1.396522  1.75121  1.8627  1.9785  2.3249</span>
-<span class="co">#&gt; d[3]     1.738849  2.01360  2.1271  2.2440  2.5770</span>
-<span class="co">#&gt; d[4]     1.193555  1.76900  2.0168  2.2668  2.8844</span>
-<span class="co">#&gt; d[5]     1.240827  1.52373  1.6324  1.7396  2.0481</span>
-<span class="co">#&gt; d[6]    -0.904529 -0.04753  0.3256  0.6840  1.3827</span>
-<span class="co">#&gt; d[7]     1.594836  1.99408  2.1465  2.2970  2.7452</span>
-<span class="co">#&gt; sd       0.008791  0.07374  0.1499  0.2572  0.6653</span>
+<span class="co">#&gt; d[2]     1.418943  1.75704  1.8699  1.9834  2.3151</span>
+<span class="co">#&gt; d[3]     1.746567  2.01387  2.1282  2.2466  2.5625</span>
+<span class="co">#&gt; d[4]     1.225492  1.78349  2.0319  2.2849  2.8830</span>
+<span class="co">#&gt; d[5]     1.238582  1.51947  1.6322  1.7385  2.0328</span>
+<span class="co">#&gt; d[6]    -0.956995 -0.07592  0.3218  0.6946  1.3895</span>
+<span class="co">#&gt; d[7]     1.596075  1.98883  2.1410  2.2950  2.7191</span>
+<span class="co">#&gt; sd       0.006373  0.06759  0.1447  0.2536  0.6250</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Treat.order</span>
@@ -398,7 +398,7 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $deviance</span>
 <span class="co">#&gt;     Dbar       pD      DIC </span>
-<span class="co">#&gt; 27.91516 18.55096 46.46612 </span>
+<span class="co">#&gt; 28.08183 18.70298 46.78481 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $total_n</span>
 <span class="co">#&gt; [1] 24</span>
@@ -426,8 +426,8 @@ result &lt;-<span class="st"> </span><span class="kw">ume.network.run</span>(net
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.002623</span>
-<span class="co">#&gt; [1] 1.001766</span>
+<span class="co">#&gt; [1] 1.006684</span>
+<span class="co">#&gt; [1] 1.00296</span>
 <span class="kw">summary</span>(result)
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
@@ -440,27 +440,27 @@ result &lt;-<span class="st"> </span><span class="kw">ume.network.run</span>(net
 <span class="co">#&gt;    plus standard error of the mean:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;            Mean     SD  Naive SE Time-series SE</span>
-<span class="co">#&gt; d[1,2]  0.34163 0.5827 0.0015044       0.002031</span>
-<span class="co">#&gt; d[1,3]  0.86072 0.2749 0.0007097       0.001536</span>
-<span class="co">#&gt; d[2,3] -0.05379 0.7410 0.0019132       0.003017</span>
-<span class="co">#&gt; d[1,4]  1.42242 0.8802 0.0022727       0.006599</span>
-<span class="co">#&gt; d[2,4]  0.65193 0.7360 0.0019004       0.003491</span>
-<span class="co">#&gt; d[3,4]  0.19188 0.7794 0.0020124       0.003224</span>
+<span class="co">#&gt; d[1,2]  0.34146 0.5797 0.0014969       0.002042</span>
+<span class="co">#&gt; d[1,3]  0.86185 0.2733 0.0007055       0.001534</span>
+<span class="co">#&gt; d[2,3] -0.05552 0.7428 0.0019179       0.002964</span>
+<span class="co">#&gt; d[1,4]  1.42669 0.8802 0.0022728       0.006704</span>
+<span class="co">#&gt; d[2,4]  0.64796 0.7327 0.0018918       0.003428</span>
+<span class="co">#&gt; d[3,4]  0.19620 0.7781 0.0020092       0.003215</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;           2.5%      25%      50%    75% 97.5%</span>
-<span class="co">#&gt; d[1,2] -0.8072 -0.03229  0.33856 0.7135 1.503</span>
-<span class="co">#&gt; d[1,3]  0.3380  0.68063  0.85256 1.0324 1.430</span>
-<span class="co">#&gt; d[2,3] -1.5262 -0.52784 -0.05201 0.4245 1.411</span>
-<span class="co">#&gt; d[1,4] -0.2146  0.82880  1.38530 1.9723 3.273</span>
-<span class="co">#&gt; d[2,4] -0.8051  0.17664  0.64700 1.1238 2.125</span>
-<span class="co">#&gt; d[3,4] -1.3723 -0.30873  0.19971 0.6974 1.719</span>
+<span class="co">#&gt; d[1,2] -0.8123 -0.02871  0.33917 0.7103 1.507</span>
+<span class="co">#&gt; d[1,3]  0.3404  0.68338  0.85497 1.0332 1.426</span>
+<span class="co">#&gt; d[2,3] -1.5276 -0.53371 -0.05369 0.4206 1.417</span>
+<span class="co">#&gt; d[1,4] -0.1982  0.83438  1.38623 1.9744 3.273</span>
+<span class="co">#&gt; d[2,4] -0.7992  0.17517  0.64554 1.1138 2.109</span>
+<span class="co">#&gt; d[3,4] -1.3650 -0.30370  0.20373 0.7029 1.714</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $deviance</span>
 <span class="co">#&gt;     Dbar       pD      DIC </span>
-<span class="co">#&gt; 53.39039 44.93739 98.32778 </span>
+<span class="co">#&gt; 53.38484 44.90999 98.29484 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $total_n</span>
 <span class="co">#&gt; [1] 50</span>
@@ -486,8 +486,8 @@ result &lt;-<span class="st"> </span><span class="kw">nodesplit.network.run</spa
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.002946</span>
-<span class="co">#&gt; [1] 1.000417</span>
+<span class="co">#&gt; [1] 1.001497</span>
+<span class="co">#&gt; [1] 1.000572</span>
 <span class="kw">summary</span>(result)
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
@@ -499,35 +499,35 @@ result &lt;-<span class="st"> </span><span class="kw">nodesplit.network.run</spa
 <span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
 <span class="co">#&gt;    plus standard error of the mean:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;                    Mean      SD  Naive SE Time-series SE</span>
-<span class="co">#&gt; d[1]          0.0000000 0.00000 0.000e+00      0.0000000</span>
-<span class="co">#&gt; d[2]         -0.0015963 0.03012 7.777e-05      0.0001840</span>
-<span class="co">#&gt; d[3]         -0.1604129 0.04325 1.117e-04      0.0003544</span>
-<span class="co">#&gt; d[4]         -0.0442432 0.04677 1.208e-04      0.0002442</span>
-<span class="co">#&gt; d[5]         -0.1127774 0.06001 1.549e-04      0.0004670</span>
-<span class="co">#&gt; d[6]         -0.1546198 0.07718 1.993e-04      0.0005737</span>
-<span class="co">#&gt; d[7]         -0.4644528 0.10064 2.599e-04      0.0005742</span>
-<span class="co">#&gt; d[8]         -0.1987703 0.22032 5.689e-04      0.0012597</span>
-<span class="co">#&gt; d[9]          0.0035793 0.03708 9.574e-05      0.0002175</span>
-<span class="co">#&gt; diff          1.2363826 0.41603 1.074e-03      0.0039086</span>
-<span class="co">#&gt; direct        1.4003748 0.41189 1.063e-03      0.0038881</span>
-<span class="co">#&gt; oneminusprob  0.0007333 0.02707 6.990e-05      0.0001153</span>
-<span class="co">#&gt; prob          0.9992667 0.02707 6.990e-05      0.0001153</span>
+<span class="co">#&gt;                   Mean      SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; d[1]          0.000000 0.00000 0.000e+00      0.000e+00</span>
+<span class="co">#&gt; d[2]         -0.001362 0.03026 7.813e-05      1.902e-04</span>
+<span class="co">#&gt; d[3]         -0.160086 0.04348 1.123e-04      3.549e-04</span>
+<span class="co">#&gt; d[4]         -0.044104 0.04639 1.198e-04      2.348e-04</span>
+<span class="co">#&gt; d[5]         -0.112890 0.06011 1.552e-04      4.737e-04</span>
+<span class="co">#&gt; d[6]         -0.154543 0.07771 2.007e-04      5.773e-04</span>
+<span class="co">#&gt; d[7]         -0.464651 0.10113 2.611e-04      5.719e-04</span>
+<span class="co">#&gt; d[8]         -0.198425 0.21934 5.663e-04      1.262e-03</span>
+<span class="co">#&gt; d[9]          0.003924 0.03704 9.565e-05      2.215e-04</span>
+<span class="co">#&gt; diff          1.243014 0.41918 1.082e-03      3.934e-03</span>
+<span class="co">#&gt; direct        1.407024 0.41520 1.072e-03      3.936e-03</span>
+<span class="co">#&gt; oneminusprob  0.000460 0.02144 5.536e-05      9.063e-05</span>
+<span class="co">#&gt; prob          0.999540 0.02144 5.536e-05      9.063e-05</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;                  2.5%      25%       50%      75%     97.5%</span>
 <span class="co">#&gt; d[1]          0.00000  0.00000  0.000000  0.00000  0.000000</span>
-<span class="co">#&gt; d[2]         -0.06110 -0.02168 -0.001580  0.01863  0.057376</span>
-<span class="co">#&gt; d[3]         -0.24572 -0.18947 -0.160013 -0.13130 -0.076128</span>
-<span class="co">#&gt; d[4]         -0.13602 -0.07572 -0.044110 -0.01273  0.047142</span>
-<span class="co">#&gt; d[5]         -0.23007 -0.15347 -0.112657 -0.07226  0.004435</span>
-<span class="co">#&gt; d[6]         -0.30625 -0.20684 -0.154752 -0.10262 -0.003026</span>
-<span class="co">#&gt; d[7]         -0.66319 -0.53217 -0.463915 -0.39695 -0.267910</span>
-<span class="co">#&gt; d[8]         -0.63290 -0.34653 -0.198217 -0.05064  0.232463</span>
-<span class="co">#&gt; d[9]         -0.06943 -0.02138  0.003501  0.02865  0.076170</span>
-<span class="co">#&gt; diff          0.46371  0.95065  1.222174  1.50627  2.094969</span>
-<span class="co">#&gt; direct        0.63733  1.11777  1.385766  1.66642  2.253635</span>
+<span class="co">#&gt; d[2]         -0.06069 -0.02171 -0.001332  0.01902  0.058191</span>
+<span class="co">#&gt; d[3]         -0.24523 -0.18952 -0.159844 -0.13067 -0.075224</span>
+<span class="co">#&gt; d[4]         -0.13530 -0.07539 -0.044140 -0.01272  0.046438</span>
+<span class="co">#&gt; d[5]         -0.23139 -0.15318 -0.112906 -0.07241  0.004891</span>
+<span class="co">#&gt; d[6]         -0.30702 -0.20665 -0.154555 -0.10219 -0.002477</span>
+<span class="co">#&gt; d[7]         -0.66453 -0.53267 -0.464307 -0.39644 -0.267300</span>
+<span class="co">#&gt; d[8]         -0.62794 -0.34597 -0.199391 -0.05099  0.232300</span>
+<span class="co">#&gt; d[9]         -0.06861 -0.02109  0.003946  0.02890  0.076507</span>
+<span class="co">#&gt; diff          0.46569  0.95257  1.229199  1.51659  2.104262</span>
+<span class="co">#&gt; direct        0.63362  1.11950  1.392812  1.67682  2.261551</span>
 <span class="co">#&gt; oneminusprob  0.00000  0.00000  0.000000  0.00000  0.000000</span>
 <span class="co">#&gt; prob          1.00000  1.00000  1.000000  1.00000  1.000000</span>
 <span class="co">#&gt; </span>
@@ -536,17 +536,17 @@ result &lt;-<span class="st"> </span><span class="kw">nodesplit.network.run</spa
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $`Inconsistency estimate`</span>
-<span class="co">#&gt; [1] 1.236383</span>
+<span class="co">#&gt; [1] 1.243014</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $p_value</span>
-<span class="co">#&gt; [1] 0.001466667</span>
+<span class="co">#&gt; [1] 0.00092</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;summary.nodesplit.network.result&quot;</span></code></pre></div>
 </div>
-<div id="finding-risk-difference-and-relative-risk-instead-of-odds-ratio-with-binomial-outcomes" class="section level2">
-<h2>Finding risk difference and relative risk instead of odds ratio with Binomial outcomes</h2>
-<p>We estimate odds ratios using our NMA model, and then we apply these odds ratios to a baseline risk (i.e. risk in placebo) to estimate absolute event rates for all treatments. Using these absolute event rates, we are then able to find number needed to treat, risk difference, and relative risk.</p>
+<div id="finding-risk-difference-relative-risk-and-number-needed-to-treat-with-binomial-outcomes" class="section level2">
+<h2>Finding risk difference, relative risk, and number needed to treat with Binomial outcomes</h2>
+<p>Default summary measure when analyzing binary outcomes is the odds ratio. We have added an option to calculate risk difference, relative risk, and number needed to treat by incorporating external baseline risk in treatment A (i.e. placebo)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Using metaprop function from meta package, we meta-analyze placebo event proportion.</span>
 <span class="co">#library(meta)</span>
 <span class="co">#placebo_index &lt;- which(certolizumab$Treat == &quot;Placebo&quot;)</span>
@@ -561,17 +561,16 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; Graph information:</span>
 <span class="co">#&gt;    Observed stochastic nodes: 24</span>
 <span class="co">#&gt;    Unobserved stochastic nodes: 32</span>
-<span class="co">#&gt;    Total graph size: 649</span>
+<span class="co">#&gt;    Total graph size: 653</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Initializing model</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [1] 1.052281</span>
-<span class="co">#&gt; [1] 1.004855</span>
-<span class="co">#&gt; [1] 1.033242</span>
-<span class="kw">summary</span>(result, <span class="dt">extra.pars =</span> <span class="kw">c</span>(<span class="st">&quot;RD&quot;</span>, <span class="st">&quot;RR&quot;</span>))
+<span class="co">#&gt; [1] 1.007904</span>
+<span class="co">#&gt; [1] 1.002061</span>
+<span class="kw">summary</span>(result, <span class="dt">extra.pars =</span> <span class="kw">c</span>(<span class="st">&quot;RD&quot;</span>, <span class="st">&quot;RR&quot;</span>, <span class="st">&quot;NNT&quot;</span>))
 <span class="co">#&gt; $summary.samples</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Iterations = 1:50000</span>
@@ -582,55 +581,63 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span>
 <span class="co">#&gt;    plus standard error of the mean:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;            Mean      SD  Naive SE Time-series SE</span>
-<span class="co">#&gt; RD[1]  0.000000 0.00000 0.0000000      0.0000000</span>
-<span class="co">#&gt; RD[2]  0.069974 0.14478 0.0003738      0.0009013</span>
-<span class="co">#&gt; RD[3]  0.264297 0.27909 0.0007206      0.0024122</span>
-<span class="co">#&gt; RD[4]  0.007705 0.12482 0.0003223      0.0010736</span>
-<span class="co">#&gt; RD[5] -0.085809 0.05506 0.0001422      0.0002372</span>
-<span class="co">#&gt; RD[6] -0.068181 0.09464 0.0002443      0.0005270</span>
-<span class="co">#&gt; RD[7] -0.011367 0.10515 0.0002715      0.0006460</span>
-<span class="co">#&gt; RR[1]  1.000000 0.00000 0.0000000      0.0000000</span>
-<span class="co">#&gt; RR[2]  1.767481 1.74945 0.0045171      0.0108563</span>
-<span class="co">#&gt; RR[3]  4.086763 4.06913 0.0105064      0.0309418</span>
-<span class="co">#&gt; RR[4]  1.128489 1.49171 0.0038516      0.0125592</span>
-<span class="co">#&gt; RR[5]  0.194134 0.28364 0.0007324      0.0021752</span>
-<span class="co">#&gt; RR[6]  0.378558 0.99072 0.0025580      0.0057825</span>
-<span class="co">#&gt; RR[7]  0.927518 1.20386 0.0031084      0.0076569</span>
-<span class="co">#&gt; d[1]   0.000000 0.00000 0.0000000      0.0000000</span>
-<span class="co">#&gt; d[2]   0.356631 1.09470 0.0028265      0.0064195</span>
-<span class="co">#&gt; d[3]   1.503419 1.86689 0.0048203      0.0158827</span>
-<span class="co">#&gt; d[4]  -0.236938 1.04514 0.0026985      0.0079657</span>
-<span class="co">#&gt; d[5]  -1.991291 0.69636 0.0017980      0.0052266</span>
-<span class="co">#&gt; d[6]  -1.997013 1.48820 0.0038425      0.0089390</span>
-<span class="co">#&gt; d[7]  -0.486880 1.08371 0.0027981      0.0066458</span>
-<span class="co">#&gt; sd     0.926878 0.62896 0.0016240      0.0093735</span>
+<span class="co">#&gt;              Mean        SD  Naive SE Time-series SE</span>
+<span class="co">#&gt; NNT[2]  42.035229 1.260e+04 3.253e+01      3.253e+01</span>
+<span class="co">#&gt; NNT[3]  31.598247 1.728e+04 4.463e+01      4.463e+01</span>
+<span class="co">#&gt; NNT[4] -14.646478 3.464e+03 8.945e+00      8.945e+00</span>
+<span class="co">#&gt; NNT[5] -14.784190 2.894e+02 7.473e-01      7.471e-01</span>
+<span class="co">#&gt; NNT[6] -21.708843 1.609e+03 4.154e+00      4.151e+00</span>
+<span class="co">#&gt; NNT[7] -21.420908 5.020e+03 1.296e+01      1.296e+01</span>
+<span class="co">#&gt; RD[2]    0.068744 1.429e-01 3.690e-04      9.083e-04</span>
+<span class="co">#&gt; RD[3]    0.260370 2.788e-01 7.197e-04      2.394e-03</span>
+<span class="co">#&gt; RD[4]    0.006294 1.225e-01 3.162e-04      1.006e-03</span>
+<span class="co">#&gt; RD[5]   -0.086458 5.450e-02 1.407e-04      2.164e-04</span>
+<span class="co">#&gt; RD[6]   -0.068626 9.394e-02 2.426e-04      5.191e-04</span>
+<span class="co">#&gt; RD[7]   -0.012747 1.027e-01 2.651e-04      6.419e-04</span>
+<span class="co">#&gt; RR[2]    1.750489 1.711e+00 4.418e-03      1.074e-02</span>
+<span class="co">#&gt; RR[3]    4.041785 4.073e+00 1.052e-02      3.043e-02</span>
+<span class="co">#&gt; RR[4]    1.109363 1.434e+00 3.703e-03      1.176e-02</span>
+<span class="co">#&gt; RR[5]    0.190873 2.631e-01 6.794e-04      1.813e-03</span>
+<span class="co">#&gt; RR[6]    0.375122 9.798e-01 2.530e-03      5.893e-03</span>
+<span class="co">#&gt; RR[7]    0.910651 1.144e+00 2.953e-03      7.209e-03</span>
+<span class="co">#&gt; d[1]     0.000000 0.000e+00 0.000e+00      0.000e+00</span>
+<span class="co">#&gt; d[2]     0.347442 1.079e+00 2.785e-03      6.393e-03</span>
+<span class="co">#&gt; d[3]     1.476973 1.873e+00 4.836e-03      1.581e-02</span>
+<span class="co">#&gt; d[4]    -0.248768 1.026e+00 2.649e-03      7.366e-03</span>
+<span class="co">#&gt; d[5]    -1.996716 6.847e-01 1.768e-03      5.111e-03</span>
+<span class="co">#&gt; d[6]    -1.998992 1.489e+00 3.845e-03      9.059e-03</span>
+<span class="co">#&gt; d[7]    -0.500724 1.072e+00 2.768e-03      6.520e-03</span>
+<span class="co">#&gt; sd       0.923497 6.231e-01 1.609e-03      9.109e-03</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 2. Quantiles for each variable:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;            2.5%      25%      50%       75%   97.5%</span>
-<span class="co">#&gt; RD[1]  0.000000  0.00000  0.00000  0.000000  0.0000</span>
-<span class="co">#&gt; RD[2] -0.099721 -0.01265  0.02943  0.106251  0.4965</span>
-<span class="co">#&gt; RD[3] -0.092715  0.02940  0.18733  0.467032  0.8516</span>
-<span class="co">#&gt; RD[4] -0.127729 -0.04834 -0.02037  0.017316  0.3863</span>
-<span class="co">#&gt; RD[5] -0.214252 -0.11186 -0.07628 -0.050513 -0.0191</span>
-<span class="co">#&gt; RD[6] -0.215423 -0.10647 -0.06906 -0.041123  0.1192</span>
-<span class="co">#&gt; RD[7] -0.145176 -0.05735 -0.02689  0.003628  0.2676</span>
-<span class="co">#&gt; RR[1]  1.000000  1.00000  1.00000  1.000000  1.0000</span>
-<span class="co">#&gt; RR[2]  0.179859  0.84480  1.34195  2.092665  6.1280</span>
-<span class="co">#&gt; RR[3]  0.171169  1.34627  2.91630  5.483107 14.8144</span>
-<span class="co">#&gt; RR[4]  0.144971  0.47835  0.73367  1.199708  4.8295</span>
-<span class="co">#&gt; RR[5]  0.036490  0.10726  0.15211  0.212044  0.5808</span>
-<span class="co">#&gt; RR[6]  0.007671  0.06673  0.14997  0.333122  2.2221</span>
-<span class="co">#&gt; RR[7]  0.072351  0.39175  0.65489  1.043474  3.6384</span>
-<span class="co">#&gt; d[1]   0.000000  0.00000  0.00000  0.000000  0.0000</span>
-<span class="co">#&gt; d[2]  -1.807327 -0.18698  0.33878  0.883041  2.6304</span>
-<span class="co">#&gt; d[3]  -1.857326  0.34402  1.37033  2.541602  5.5668</span>
-<span class="co">#&gt; d[4]  -2.022832 -0.79873 -0.34300  0.206577  2.1654</span>
-<span class="co">#&gt; d[5]  -3.419504 -2.33267 -1.98160 -1.646716 -0.5970</span>
-<span class="co">#&gt; d[6]  -4.985617 -2.81426 -1.99692 -1.178860  0.9701</span>
-<span class="co">#&gt; d[7]  -2.732457 -1.00970 -0.46504  0.048326  1.6667</span>
-<span class="co">#&gt; sd     0.137532  0.51119  0.78163  1.168909  2.6152</span>
+<span class="co">#&gt;              2.5%       25%       50%       75%     97.5%</span>
+<span class="co">#&gt; NNT[2] -254.83609 -17.68861   6.37052 21.225213 259.25377</span>
+<span class="co">#&gt; NNT[3] -105.44758   1.28747   2.62192  7.363017  96.03555</span>
+<span class="co">#&gt; NNT[4] -253.64122 -35.41569 -16.30049  6.605522 217.06738</span>
+<span class="co">#&gt; NNT[5]  -45.18897 -19.37519 -12.90740 -8.774282  -4.29021</span>
+<span class="co">#&gt; NNT[6]  -67.58621 -20.64501 -12.89719 -8.149641  24.71534</span>
+<span class="co">#&gt; NNT[7] -246.07628 -34.56339 -16.54758  3.037769 215.58206</span>
+<span class="co">#&gt; RD[2]    -0.10090  -0.01305   0.02915  0.105839   0.48955</span>
+<span class="co">#&gt; RD[3]    -0.09630   0.02606   0.18241  0.462939   0.84998</span>
+<span class="co">#&gt; RD[4]    -0.12865  -0.04874  -0.02075  0.016625   0.37624</span>
+<span class="co">#&gt; RD[5]    -0.21646  -0.11229  -0.07652 -0.050831  -0.01944</span>
+<span class="co">#&gt; RD[6]    -0.21659  -0.10668  -0.06903 -0.041020   0.11508</span>
+<span class="co">#&gt; RD[7]    -0.14731  -0.05747  -0.02720  0.003165   0.26021</span>
+<span class="co">#&gt; RR[2]     0.17868   0.84000   1.33898  2.077908   6.05765</span>
+<span class="co">#&gt; RR[3]     0.16059   1.30675   2.87566  5.427295  14.72855</span>
+<span class="co">#&gt; RR[4]     0.14603   0.47444   0.72835  1.189778   4.66197</span>
+<span class="co">#&gt; RR[5]     0.03679   0.10706   0.15182  0.211493   0.56495</span>
+<span class="co">#&gt; RR[6]     0.00759   0.06647   0.15085  0.335968   2.17992</span>
+<span class="co">#&gt; RR[7]     0.07093   0.38717   0.65096  1.038102   3.58063</span>
+<span class="co">#&gt; d[1]      0.00000   0.00000   0.00000  0.000000   0.00000</span>
+<span class="co">#&gt; d[2]     -1.81274  -0.19397   0.33594  0.875551   2.57201</span>
+<span class="co">#&gt; d[3]     -1.92702   0.30810   1.35138  2.523692   5.56546</span>
+<span class="co">#&gt; d[4]     -2.02148  -0.80665  -0.35060  0.198459   2.11750</span>
+<span class="co">#&gt; d[5]     -3.41363  -2.33419  -1.98414 -1.650487  -0.62279</span>
+<span class="co">#&gt; d[6]     -4.99975  -2.81776  -1.99269 -1.170444   0.94228</span>
+<span class="co">#&gt; d[7]     -2.74772  -1.02030  -0.47162  0.041888   1.63484</span>
+<span class="co">#&gt; sd        0.13528   0.51261   0.78088  1.167559   2.56812</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Treat.order</span>
@@ -641,7 +648,7 @@ result &lt;-<span class="st"> </span><span class="kw">network.run</span>(network
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $deviance</span>
 <span class="co">#&gt;     Dbar       pD      DIC </span>
-<span class="co">#&gt; 26.99643 22.63831 49.63474 </span>
+<span class="co">#&gt; 27.10638 22.73077 49.83714 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $total_n</span>
 <span class="co">#&gt; [1] 24</span>

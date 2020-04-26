@@ -74,5 +74,5 @@ summary(result)
 
 network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", mean.A = -2.27, prec.A = 2.53))
 result <- network.run(network)
-summary(result, extra.pars = c("RD", "RR"))
+summary(result, extra.pars = c("RD", "RR", "NNT"))
 
