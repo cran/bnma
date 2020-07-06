@@ -1,7 +1,8 @@
 Package: bnma
 Type: Package
 Title: Bayesian Network Meta-Analysis using 'JAGS'
-Version: 1.1.2
+Version: 1.2.0
+Date: 2020-07-04
 Depends: R (>= 2.10)
 Imports: rjags (>= 4-6), graphics, stats, utils, coda (>= 0.13),
         ggplot2, grid, igraph
@@ -16,9 +17,9 @@ Encoding: UTF-8
 VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2020-04-26 12:38:23 UTC; ms19g661
+Packaged: 2020-07-04 23:30:46 UTC; ms19g661
 Author: Michael Seo [aut, cre],
   Christopher Schmid [aut]
 Maintainer: Michael Seo <swj8874@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-04-27 00:40:02 UTC
+Date/Publication: 2020-07-06 12:10:02 UTC
