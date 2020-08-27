@@ -4,6 +4,7 @@
 #'
 #' @param network Network object created from \code{\link{network.data}} function
 #' @param inits Initial values for the parameters being sampled. If left unspecified, program will generate reasonable initial values.
+#' @param RNG.inits List of .RNG.name and .RNG.seed that control the JAGS RNGs. Please refer to jags.model function in rjags for more information.
 #' @param n.chains Number of chains to run
 #' @param max.run Maximum number of iterations that user is willing to run. If the algorithm is not converging, it will run up to \code{max.run} iterations before printing a message that it did not converge
 #' @param setsize Number of iterations that are run between convergence checks. If the algorithm converges fast, user wouldn't need a big setsize. The number that is printed between each convergence checks is the gelman-rubin diagnostics and we would want that to be below the conv.limit the user specifies.
@@ -13,6 +14,7 @@
 #' @return
 #' \item{data_rjags}{Data that is put into rjags function \code{\link{jags.model}}}
 #' \item{inits}{Initial values that are either specified by the user or generated as a default}
+#' \item{RNG.inits}{List of .RNG.name and .RNG.seed used for reproducibility}
 #' \item{pars.save}{Parameters that are saved. Add more parameters in extra.pars.save if other variables are desired}
 #' \item{burnin}{Half of the converged sequence is thrown out as a burnin}
 #' \item{n.thin}{If the number of iterations user wants (n.run) is less than the number of converged sequence after burnin, we thin the sequence and store the thinning interval}
@@ -30,7 +32,7 @@
 #' }
 #' @export
 
-network.run <- function(network, inits = NULL, n.chains = 3, max.run = 100000, setsize = 10000, n.run = 50000,
+network.run <- function(network, inits = NULL, RNG.inits = NULL, n.chains = 3, max.run = 100000, setsize = 10000, n.run = 50000,
                         conv.limit = 1.05, extra.pars.save = NULL){
   
   if (!inherits(network, "network.data")) {
@@ -85,8 +87,12 @@ network.run <- function(network, inits = NULL, n.chains = 3, max.run = 100000, s
         c("Eta", "d", "sigma", "sigma_transformed","prob","delta")
       }
     
+    if(response == "normal" & !is.null(mean.A) & !is.null(prec.A)){
+      pars.save <- c(pars.save, "T")
+    }
+    
     if(response == "binomial" & !is.null(mean.A) & !is.null(prec.A)){
-      pars.save <- c(pars.save, "RD", "RR", "NNT")
+      pars.save <- c(pars.save, "T", "RD", "RR", "NNT")
     }
     
     if(type == "fixed"){
@@ -133,9 +139,18 @@ network.run <- function(network, inits = NULL, n.chains = 3, max.run = 100000, s
       }
     }
     
+    if(is.null(RNG.inits)){
+      RNG.inits <- list()
+      for(i in 1:n.chains){
+        RNG.inits[[i]] <- list(".RNG.name" = "base::Wichmann-Hill", ".RNG.seed" = i)
+      }
+    }
+    
+    inits <- mapply(c, inits, RNG.inits, SIMPLIFY = FALSE)
+    
     samples <- jags.fit(network, data, pars.save, inits, n.chains, max.run, setsize, n.run, conv.limit)
     
-    result <- list(network = network, data.rjags = data, inits = inits, pars.save = pars.save)
+    result <- list(network = network, data.rjags = data, inits = inits, RNG.inits= RNG.inits, pars.save = pars.save)
     result <- c(result, samples)
     
     result$deviance <- calculate.deviance(result)

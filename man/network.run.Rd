@@ -7,6 +7,7 @@
 network.run(
   network,
   inits = NULL,
+  RNG.inits = NULL,
   n.chains = 3,
   max.run = 1e+05,
   setsize = 10000,
@@ -19,6 +20,8 @@ network.run(
 \item{network}{Network object created from \code{\link{network.data}} function}
 
 \item{inits}{Initial values for the parameters being sampled. If left unspecified, program will generate reasonable initial values.}
+
+\item{RNG.inits}{List of .RNG.name and .RNG.seed that control the JAGS RNGs. Please refer to jags.model function in rjags for more information.}
 
 \item{n.chains}{Number of chains to run}
 
@@ -35,6 +38,7 @@ network.run(
 \value{
 \item{data_rjags}{Data that is put into rjags function \code{\link{jags.model}}}
 \item{inits}{Initial values that are either specified by the user or generated as a default}
+\item{RNG.inits}{List of .RNG.name and .RNG.seed used for reproducibility}
 \item{pars.save}{Parameters that are saved. Add more parameters in extra.pars.save if other variables are desired}
 \item{burnin}{Half of the converged sequence is thrown out as a burnin}
 \item{n.thin}{If the number of iterations user wants (n.run) is less than the number of converged sequence after burnin, we thin the sequence and store the thinning interval}

@@ -76,3 +76,21 @@ network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, S
 result <- network.run(network)
 summary(result, extra.pars = c("RD", "RR", "NNT"))
 
+## -----------------------------------------------------------------------------
+set.seed(1234) # seed for generating reproducible initial values
+network <- with(blocker, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial"))
+
+# JAGS RNG list of initial values
+jags_inits <- list(
+  list(".RNG.name"="base::Wichmann-Hill", ".RNG.seed" = 94387),
+  list(".RNG.name"="base::Wichmann-Hill", ".RNG.seed" = 24507),
+  list(".RNG.name"="base::Wichmann-Hill", ".RNG.seed" = 39483)
+)
+result <- network.run(network, n.chains=3, RNG.inits=jags_inits)
+
+# bnma initial values now contain initial values for the parameters and the JAGS RNG initial values
+str(result$inits)
+
+# reproducible results
+summary(result)
+
