@@ -48,6 +48,22 @@ Another important preprocessing step that is done in `network.data` function is 
 network$r
 ```
 
+## Datasets
+
+Here are all the datasets available in the package for testing.
+
+```{r}
+#blocker (binomial)
+#cardiovascular (multinomial)
+#certolizumab (binomial with a covariate)
+#parkinsons (normal)
+#parkinsons_contrast (normal- for contrast model)
+#smoking (binomial)
+#statins (binomial with a covariate)
+#thrombolytic (binomial)
+```
+
+
 ## Priors
 
 Priors can be set in the `network.data` function. If left unspecified, default values are used. For heterogeneity parameters of the random effects model, we follow the data format from a similar Bayesian network meta-analysis R package `gemtc`. It should be a list of length 3 where the first element should be the distribution (one of dunif, dgamma, dhnorm, dwish) and the next two are the parameters associated with the distribution. Here is an example of assigning a half-normal distribution with mean 0 and standard deviation 5. 
@@ -66,16 +82,20 @@ result <- network.run(network, n.run = 30000)
 
 ## Model Summary
 
-Package includes many summary tools that can be used. One of the useful summary might be the forest plot.
+Package includes many summary tools that can be used. One useful summary might be the forest plot.
 
-```{r, fig.width = 6, fig.height = 6}
-network.forest.plot(result)
+```{r, fig.height=10, fig.width=10, out.height=600, out.width=600}
+network.forest.plot(result, label.margin = 15)
+# relative.effects.table(result)
 # draw.network.graph(network)
+# network.gelman.plot(result)
 # network.autocorr.diag(result)
 # network.autocorr.plot(result)
+# network.rank.tx.plot(result)
 # network.cumrank.tx.plot(result)
+# sucra(result)
 # network.deviance.plot(result)
-# network.gelman.plot(result)
+# network.leverage.plot(result)
 ```
 
 ## Multinomial model
@@ -101,15 +121,15 @@ summary(result)
 
 Covariate plot shows you how the relative treatment effect changes as the covariate varies.
 
-```{r, fig.width = 6, fig.height = 6}
+```{r, fig.height=10, fig.width=10, out.height=600, out.width=600}
 network.covariate.plot(result, base.treatment = "Placebo", comparison.treatment = "Statin")
 ```
 
 ## Baseline risk
 
-Another useful addition of this network package is the ability to model baseline risk. We can have "common", "independent", or "exchangeable" assumption on the baseline slopes and "independenet" and "exchangeable" assumption on the baseline risk. Here we demonstrate a common baseline slope and exchangeable baseline risk model.
+Another useful addition of this network package is the ability to model baseline risk. We can have "common", "independent", or "exchangeable" assumption on the baseline slopes and "independent" and "exchangeable" assumption on the baseline risk. Here we demonstrate a common baseline slope and exchangeable baseline risk model.
 
-```{r}
+```{r} 
 network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", Treat.order = Treat.order, baseline = "common", baseline.risk = "exchangeable"))
 result <- network.run(network)
 summary(result)
@@ -120,11 +140,22 @@ summary(result)
 Unrelated mean effects (UME) model estimates separate, unrelated basic parameters. We do not assume consistency in this model. We can compare this model with the standard consistency model. If the parameter estimates are similar for both models, and there is considerable overlap in the 95% credible interval, we can conclude that there is no evidence of inconsistency in the network.
 
 ```{r}
-network <- with(smoking, {
+# fit an inconsistency model (UME)
+network2 <- with(smoking, {
   ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
 })
-result <- ume.network.run(network)
-summary(result)
+result2 <- ume.network.run(network2)
+summary(result2)
+
+# fit a consistency model and compare posterior mean deviance in the consistency model and inconsistency model
+network1 <- with(smoking, {
+  network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
+})
+result1 <- network.run(network1)
+```
+
+```{r, fig.height=10, fig.width=10, out.height=600, out.width=600}
+network.inconsistency.plot(result1, result2)
 ```
 
 ## Inconsistency model
@@ -140,7 +171,7 @@ summary(result)
 
 ## Finding risk difference, relative risk, and number needed to treat with Binomial outcomes
 
-Default summary measure when analyzing binary outcomes is the odds ratio. We have added an option to calculate risk difference, relative risk, and number needed to treat by incorporating external baseline risk in treatment A (i.e. placebo)
+Default summary measure when analyzing binary outcomes is the odds ratio. We have added an option to calculate risk difference, relative risk, and number needed to treat by incorporating external baseline risk in treatment A (i.e. placebo).
 
 ```{r}
 #Using metaprop function from meta package, we meta-analyze placebo event proportion.
@@ -151,7 +182,8 @@ Default summary measure when analyzing binary outcomes is the odds ratio. We hav
 
 network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", mean.A = -2.27, prec.A = 2.53))
 result <- network.run(network)
-summary(result, extra.pars = c("RD", "RR", "NNT"))
+#summary(result, extra.pars = c("RD", "RR", "NNT"))
+summary(result, extra.pars = c("RR"))
 ```
 
 ## Generating reproducible results: initializing the random number generators

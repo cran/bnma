@@ -21,19 +21,33 @@ network$Study.order
 network$r
 
 ## -----------------------------------------------------------------------------
+#blocker (binomial)
+#cardiovascular (multinomial)
+#certolizumab (binomial with a covariate)
+#parkinsons (normal)
+#parkinsons_contrast (normal- for contrast model)
+#smoking (binomial)
+#statins (binomial with a covariate)
+#thrombolytic (binomial)
+
+## -----------------------------------------------------------------------------
 network <- with(smoking, network.data(Outcomes = Outcomes, Study = Study, Treat = Treat, N = N, response = "binomial", mean.d = 0.1, hy.prior = list("dhnorm", 0, 5)))
 
 ## -----------------------------------------------------------------------------
 result <- network.run(network, n.run = 30000)
 
-## ---- fig.width = 6, fig.height = 6-------------------------------------------
-network.forest.plot(result)
+## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
+network.forest.plot(result, label.margin = 15)
+# relative.effects.table(result)
 # draw.network.graph(network)
+# network.gelman.plot(result)
 # network.autocorr.diag(result)
 # network.autocorr.plot(result)
+# network.rank.tx.plot(result)
 # network.cumrank.tx.plot(result)
+# sucra(result)
 # network.deviance.plot(result)
-# network.gelman.plot(result)
+# network.leverage.plot(result)
 
 ## -----------------------------------------------------------------------------
 network <- with(cardiovascular, network.data(Outcomes, Study, Treat, N, response = "multinomial"))
@@ -45,7 +59,7 @@ network <- with(statins, network.data(Outcomes, Study, Treat, N=N, response = "b
 result <- network.run(network)
 summary(result)
 
-## ---- fig.width = 6, fig.height = 6-------------------------------------------
+## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
 network.covariate.plot(result, base.treatment = "Placebo", comparison.treatment = "Statin")
 
 ## -----------------------------------------------------------------------------
@@ -54,11 +68,21 @@ result <- network.run(network)
 summary(result)
 
 ## -----------------------------------------------------------------------------
-network <- with(smoking, {
+# fit an inconsistency model (UME)
+network2 <- with(smoking, {
   ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
 })
-result <- ume.network.run(network)
-summary(result)
+result2 <- ume.network.run(network2)
+summary(result2)
+
+# fit a consistency model and compare posterior mean deviance in the consistency model and inconsistency model
+network1 <- with(smoking, {
+  network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
+})
+result1 <- network.run(network1)
+
+## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
+network.inconsistency.plot(result1, result2)
 
 ## -----------------------------------------------------------------------------
 network <- with(thrombolytic, nodesplit.network.data(Outcomes, Study, Treat, N, response = "binomial", pair = c(3,9), type = "fixed"))
@@ -74,7 +98,8 @@ summary(result)
 
 network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", mean.A = -2.27, prec.A = 2.53))
 result <- network.run(network)
-summary(result, extra.pars = c("RD", "RR", "NNT"))
+#summary(result, extra.pars = c("RD", "RR", "NNT"))
+summary(result, extra.pars = c("RR"))
 
 ## -----------------------------------------------------------------------------
 set.seed(1234) # seed for generating reproducible initial values

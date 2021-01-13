@@ -10,7 +10,7 @@ pick.summary.variables <- function(result, extra.pars = NULL, only.pars = NULL){
     }
   }
   if(is.null(only.pars)){
-    pars <- c("d", "sd", "sigma", "b_bl", "beta", "B", "sdB")
+    pars <- c("d", "sd", "sigma", "b_bl", "beta", "C", "sdC", "sigmaC","B", "sdB", "sigmaB", "E", "sdE", "sigmaE")
   } else{
     pars <- only.pars
   }
@@ -121,7 +121,7 @@ network.gelman.plot <- function(result, extra.pars = NULL, only.pars = NULL){
 #' })
 #' \donttest{
 #' result <- network.run(network)
-#' network.gelman.diag(result, extra.pars = "Eta")
+#' network.gelman.diag(result, extra.pars = c("Eta"))
 #' }
 #' @export
 
@@ -584,7 +584,7 @@ network.cumrank.tx.plot <- function(result, txnames = NULL, catnames = NULL, leg
 #' sucra(result)
 #' }
 #' @seealso \code{\link{rank.tx}}
-#' @references G. Salanti, A.E. Ades, J.P.A. Ioannidisa (2011), \emph{Graphical methods and numerical summaries for presenting results from multiple-treatment meta-analysis: an overview and tutorial}, Journal of Clinical Epidemiology 64(2):163-71. [\url{https://doi.org/10.1016/j.jclinepi.2010.03.016}]
+#' @references G. Salanti, A.E. Ades, J.P.A. Ioannidisa (2011), \emph{Graphical methods and numerical summaries for presenting results from multiple-treatment meta-analysis: an overview and tutorial}, Journal of Clinical Epidemiology 64(2):163-71. \doi{10.1016/j.jclinepi.2010.03.016}
 #' @export
 
 sucra = function(result, txnames = NULL, catnames = NULL)
@@ -642,7 +642,7 @@ sucra = function(result, txnames = NULL, catnames = NULL)
 #' result <- network.run(network)
 #' calculate.deviance(result)
 #' }
-#' @references S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013a), \emph{A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials}, Medical Decision Making 33(5):607-617. [\url{https://doi.org/10.1177/0272989X12458724}]
+#' @references S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013a), \emph{A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials}, Medical Decision Making 33(5):607-617. \doi{10.1177/0272989X12458724}
 #' @export
 
 calculate.deviance <- function(result){
@@ -654,42 +654,18 @@ calculate.deviance <- function(result){
   Dbar <- mean(unlist(totresdev))
 
   ###### find residual deviance by arm
-  if(network$response == "multinomial" & !is.null(network$miss.matrix)){
-    dev <- list()
-    for(ii in seq(network$npattern)){
-      dev_each <- lapply(samples, function(x) { x[,grep(paste0("dev", ii, "\\["), dimnames(samples[[1]])[[2]])]})
-      dev_each <- do.call(rbind, dev_each)
-      dev_each <- apply(dev_each, 2, mean)
-
-      n_value <- network[[paste0("n", ii)]]
-      dev_matrix <- matrix(NA, nrow = dim(n_value)[1], ncol = dim(n_value)[2])
-
-      for(i in 1:dim(dev_matrix)[1]){
-        for(j in 1:dim(dev_matrix)[2]){
-          ind <- which(paste0("dev", ii, "[", i, ",", j, "]") == names(dev_each))
-          if(length(ind) != 0){
-            dev_matrix[i,j] <- dev_each[ind]
-          }
-        }
-      }
-      dev[[paste0("dev", ii)]] <- dev_matrix
-    }
-    dev_arm <- do.call(rbind, dev)
-  } else{
-    dev <- lapply(samples, function(x) { x[,grep("dev\\[", dimnames(samples[[1]])[[2]])]})
-    dev <- do.call(rbind, dev)
-    dev <- apply(dev, 2, mean)
-
-    dev_matrix <- matrix(NA, nrow =  network$nstudy, ncol = max(network$na))
-    for(i in 1:dim(dev_matrix)[1]){
-      for(j in 1:dim(dev_matrix)[2]){
-        ind <- which(paste("dev[", i, ",", j, "]", sep = "") == names(dev))
-        if(length(ind) != 0){
-          dev_matrix[i,j] <- dev[ind]
-        }
+  dev <- lapply(samples, function(x) { x[,grep("dev\\[", dimnames(samples[[1]])[[2]])]})
+  dev <- do.call(rbind, dev)
+  dev <- apply(dev, 2, mean)
+  
+  dev_arm <- matrix(NA, nrow =  network$nstudy, ncol = max(network$na))
+  for(i in 1:dim(dev_arm)[1]){
+    for(j in 1:dim(dev_arm)[2]){
+      ind <- which(paste("dev[", i, ",", j, "]", sep = "") == names(dev))
+      if(length(ind) != 0){
+        dev_arm[i,j] <- dev[ind]
       }
     }
-    dev_arm <- dev_matrix
   }
 
   ############find leverage
@@ -731,50 +707,21 @@ calculate.deviance <- function(result){
       }
     }
   } else if(network$response == "multinomial"){
-    if(is.null(network$miss.matrix)){ #complete dataset
-      rtilda <- lapply(samples, function(x){ x[,grep("rhat\\[", dimnames(samples[[1]])[[2]])]})
-      rtilda <- do.call(rbind, rtilda)
-      rtilda <- apply(rtilda, 2, mean)
+    rtilda <- lapply(samples, function(x){ x[,grep("rhat\\[", dimnames(samples[[1]])[[2]])]})
+    rtilda <- do.call(rbind, rtilda)
+    rtilda <- apply(rtilda, 2, mean)
 
-      rtilda_arm <- devtilda_category <- array(NA, dim = c(network$nstudy, max(network$na), network$ncat))
-      for(i in 1:network$nstudy){
-        for(j in 1:network$na[i]){
-          for(k in 1:network$ncat){
-            r_value <- network$r[i,j,k]
-            rtilda_arm[i,j,k] <- rtilda[which(paste("rhat[", i, ",", j, ",", k, "]", sep = "") == names(rtilda))]
-            devtilda_category[i,j,k] <- ifelse(r_value != 0,  2 * r_value * log(r_value/rtilda_arm[i,j,k]), 0)
-          }
+    rtilda_arm <- devtilda_category <- array(NA, dim = c(network$nstudy, max(network$na), network$ncat))
+    for(i in 1:network$nstudy){
+      for(j in 1:network$na[i]){
+        for(k in 1:network$ncat){
+          r_value <- network$r[i,j,k]
+          rtilda_arm[i,j,k] <- rtilda[which(paste("rhat[", i, ",", j, ",", k, "]", sep = "") == names(rtilda))]
+          devtilda_category[i,j,k] <- ifelse(r_value != 0,  2 * r_value * log(r_value/rtilda_arm[i,j,k]), 0)
         }
       }
-      devtilda_arm <- apply(devtilda_category, 1:2, sum)
-    } else{ #incomplete datacase
-      devtilda_value <- rtilda_arm <- list()
-      for(ii in seq(network$npattern)){
-        r_values <- network[[paste0("r",ii)]]
-        devtilda_category <- rtilda_matrix <- array(NA, dim = dim(r_values))
-
-        rtilda <- lapply(samples, function(x){ x[,grep(paste0("rhat", ii, "\\["), dimnames(samples[[1]])[[2]])] })
-        rtilda <- do.call(rbind, rtilda)
-        rtilda <- apply(rtilda, 2, mean)
-
-        for(i in 1:dim(r_values)[1]){
-          for(j in 1:dim(r_values)[2]){
-            for(k in 1:dim(r_values)[3]){
-              found <- which(paste("rhat", ii, "[", i, ",", j, ",", k, "]", sep = "") == names(rtilda))
-              r_value <- r_values[i,j,k]
-              if(!is.na(r_value) & length(found) != 0){
-                rtilda_matrix [i,j,k] <- rtilda[found]
-                devtilda_category[i,j,k] <- ifelse(r_value != 0,  2 * r_value * log(r_value/rtilda_matrix[i,j,k]), 0)
-              }
-            }
-          }
-        }
-        devtilda_matrix <- apply(devtilda_category, 1:2, sum)
-        rtilda_arm[[ii]] <- rtilda_matrix
-        devtilda_value[[ii]] <- devtilda_matrix
-      }
-      devtilda_arm <- do.call(rbind, devtilda_value)
     }
+    devtilda_arm <- apply(devtilda_category, 1:2, sum)
   }
   leverage_arm <- dev_arm - devtilda_arm
   pD <- sum(leverage_arm, na.rm = TRUE)
@@ -814,9 +761,10 @@ network.deviance.plot <- function(result){
 
 #' Make a leverage plot
 #'
-#' This function makes a leverage vs. square root of residual deviance plot
+#' This function makes a leverage vs. square root of residual deviance plot (mean for each study)
 #'
 #' @param result Object created by \code{\link{network.run}} function
+#' @param per.study Indicator for using an average square root of residual deviance for each study instead of for each arm. Default is FALSE.
 #' @return None
 #' @examples
 #' network <- with(blocker, {
@@ -828,13 +776,30 @@ network.deviance.plot <- function(result){
 #' }
 #' @export
 
-network.leverage.plot <- function(result){
+network.leverage.plot <- function(result, per.study = FALSE){
+  
   deviance <- result$deviance
-  dev <- sqrt(apply(deviance$dev_arm, 1, mean, na.rm = TRUE))
-  leverage <- apply(deviance$leverage, 1, mean, na.rm = TRUE)
-  plot(dev, leverage, xlim = c(0, max(c(dev, 2.5))), ylim = c(0, max(c(leverage,4))),
-       xlab = "Square root of residual deviance", ylab = "Leverage", main = "Leverage versus residual deviance")
-  mtext("Per-study mean per-datapoint contribution")
+  if(per.study == TRUE){
+    dev <- apply(sqrt(deviance$dev_arm), 1, mean, na.rm = TRUE)
+    leverage <- apply(deviance$leverage_arm, 1, mean, na.rm = TRUE)
+    plot(dev, leverage, xlim = c(0, max(c(dev, 2.5))), ylim = c(0, max(c(leverage,4))),
+         xlab = "Square root of residual deviance", ylab = "Leverage", main = "Leverage versus residual deviance")
+    mtext("Per-study mean contribution")  
+  } else{
+    dev <- c(t(sqrt(deviance$dev_arm)))
+    dev <- dev[!is.na(dev)]
+    leverage <- c(t(deviance$leverage_arm))
+    leverage <- leverage[!is.na(leverage)]
+    plot(dev, leverage, xlim = c(0, max(c(dev, 2.5))), ylim = c(0, max(c(leverage,4))),
+         xlab = "Square root of residual deviance", ylab = "Leverage", main = "Leverage versus residual deviance")
+    mtext("Per-arm contribution")  
+  }
+  
+  x <- NULL
+  
+  for(i in 1: floor(max(c(leverage,4)))){
+    curve(i-x^2, from=0, to = max(c(dev, 2.5)), add = TRUE)
+  }
 }
 
 #' Make a covariate plot
@@ -972,7 +937,7 @@ variance.tx.effects = function(result)
 #' result <- network.run(network)
 #' network.forest.plot(result)
 #' }
-#' @references W. Viechtbauer (2010), \emph{Conducting meta-analyses in R with the metafor package}, Journal of Statistical Software, 36(3):1-48. [\url{https://doi.org/10.18637/jss.v036.i03}]
+#' @references W. Viechtbauer (2010), \emph{Conducting meta-analyses in R with the metafor package}, Journal of Statistical Software, 36(3):1-48. \doi{10.18637/jss.v036.i03}
 #' @export
 
 network.forest.plot <- function(result, level = 0.95, ticks.position = NULL, label.multiplier = 0.2, label.margin = 10, title = "Network Meta-analysis Forest plot", only.reference.treatment = FALSE){
@@ -1082,7 +1047,7 @@ network.forest.plot <- function(result, level = 0.95, ticks.position = NULL, lab
 #' draw.network.graph(network)
 #' @export
 
-draw.network.graph = function(network, label.dist = 2){
+draw.network.graph <- function(network, label.dist = 2){
 
   if(class(network) == "contrast.network.data"){
     Treat <- c(t(network$Treat))[!is.na(c(t(network$Treat)))]
@@ -1098,3 +1063,62 @@ draw.network.graph = function(network, label.dist = 2){
   g <- igraph::graph.edgelist(as.matrix(pairs[,1:2]), directed=FALSE)
   plot(g, edge.curved=FALSE, edge.width=pairs$freq, vertex.label.dist= label.dist)
 }
+
+
+#' Plotting comparison of posterior mean deviance in the consistency model and inconsistency model
+#'
+#' This function compares posterior mean deviance of inconsistency model and consistency model.
+#' Such comparison provides information that can help identify the loops in which inconsistency is present.
+#'
+#' This function draws network graph using igraph package
+#' @param result1 consistency model result from running \code{\link{network.run}} function
+#' @param result2 inconsistency model result from running \code{\link{ume.network.data}} function
+#' @param with.label indicator to show the study number; default is true.
+#' @return None
+#' @references S. Dias, N.J. Welton, A.J. Sutton, D.M. Caldwell, G. Lu, and A.E. Ades (2013), \emph{Evidence synthesis for decision making 4: inconsistency in networks of evidence based on randomized controlled trials}, Medical Decision Making 33(5):641-656. \doi{10.1177/0272989X12455847}
+#' @examples
+#' network1 <- with(smoking, {
+#'  network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
+#' })
+#' 
+#' network2 <- with(smoking, {
+#'  ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial", type = "random")
+#' })
+#' \donttest{
+#' result1 <- network.run(network1)
+#' result2 <- ume.network.run(network2)
+#' network.inconsistency.plot(result1, result2)
+#' }
+#' @export
+
+network.inconsistency.plot <- function(result1, result2, with.label = T){
+  
+  if(class(result1) != "network.result"){
+    stop("result1 has to be a consistency model result")
+  }
+  
+  if(class(result2) != "ume.network.result"){
+    stop("result2 has to be an inconsistency model result")
+  }
+ 
+  rownumber <- rep(1:nrow(result1$deviance$dev_arm), each = ncol(result1$deviance$dev_arm))
+  dev <- c(t(result1$deviance$dev_arm))
+  dev2 <- c(t(result2$deviance$dev_arm))
+  names(dev) <- names(dev2) <- rownumber
+  
+  dev <- dev[!is.na(dev)]
+  dev2 <- dev2[!is.na(dev2)]
+  max_point <- ceiling(max(c(dev, dev2))) #for same scale
+  
+  if(with.label == T){
+    plot(dev2 ~ dev, col="lightblue", pch=19, cex=2, xlim = c(0, max_point), ylim = c(0, max_point), xlab = "consistency model", ylab = "inconsistency model", cex.lab = 0.75, cex.axis = 0.75)
+    abline(0, 1, lty = "dotted")  
+    text(dev2 ~ dev, labels = names(dev), cex = 0.8)  
+  } else{
+    plot(dev2 ~ dev, xlim = c(0, max_point), ylim = c(0, max_point), xlab = "consistency model", ylab = "inconsistency model", cex.lab = 0.75, cex.axis = 0.75)
+    abline(0, 1, lty = "dotted")  
+  }
+}
+
+
+  

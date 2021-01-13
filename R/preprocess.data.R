@@ -20,6 +20,11 @@ preprocess.data <- function(Outcomes = NULL, Study = NULL, Treat = NULL, N = NUL
   transform <- transform.data(network)
   data <- transform$data
 
+  # If baseline = "exchangeable" or "independent, add a fictitious arm with overall reference treatment
+  if(baseline %in% c("exchangeable", "independent")){
+    data <- add.fictitious.row(network, data)
+  }
+  
   # If baseline.risk = "exchangeable", add a fictitious arm with overall reference treatment
   if(baseline.risk == "exchangeable"){
     data <- add.fictitious.row(network, data)
@@ -70,7 +75,7 @@ add.fictitious.row <- function(network, data){
     ncol <- dim(as.matrix(Outcomes))[2]
     if(length(no_reference) != 0){
       for(i in 1:length(no_reference)){
-        store <- rbind(store, c(rep(NA, ncol), 1, no_reference[i], 1))
+        store <- rbind(store, c(rep(NA, ncol), 1, no_reference[i], 1))  
       }
     }
 

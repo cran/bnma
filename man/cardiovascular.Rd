@@ -4,7 +4,9 @@
 \name{cardiovascular}
 \alias{cardiovascular}
 \title{Trials of low dose and high dose statins for cardiovascular disease vs. placebo}
-\format{A list of Outcomes, Treat, Study, and N}
+\format{
+A list of Outcomes, Treat, Study, and N
+}
 \usage{
 cardiovascular
 }
@@ -16,6 +18,6 @@ First column of the outcome is the patients who are still alive (ALIVE). Second 
 And, the last column is fatal cardiovascular disease (FCVD).
 }
 \references{
-C.H. Schmid, T.A. Trikalinos, I. Olkin (2014), \emph{Bayesian network meta-analysis for unordered categorical outcomes with incomplete data}, Research Synthesis Methods 5(2):162-185. [\url{https://doi.org/10.1002/jrsm.1103}]
+C.H. Schmid, T.A. Trikalinos, I. Olkin (2014), \emph{Bayesian network meta-analysis for unordered categorical outcomes with incomplete data}, Research Synthesis Methods 5(2):162-185. \doi{10.1002/jrsm.1103}
 }
 \keyword{datasets}

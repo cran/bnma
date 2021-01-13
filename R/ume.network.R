@@ -8,6 +8,7 @@
 #' @param N A vector of total number of observations in each arm. Used for binomial and multinomial responses.
 #' @param SE A vector of standard error for each arm. Used only for normal response.
 #' @param response Specification of the outcomes type. Must specify one of the following: "normal", "binomial", or "multinomial".
+#' @param Treat.order Treatment order which determines how treatments are compared. The first treatment that is specified is considered to be the baseline treatment. Default order is alphabetical. If the treatments are coded 1, 2, etc, then the treatment with a value of 1 would be assigned as a baseline treatment.
 #' @param type Type of model fitted: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".
 #' @param mean.mu Prior mean for the study effect (baseline risk)
 #' @param prec.mu Prior precision for the study effect (baseline risk)
@@ -16,16 +17,32 @@
 #' @param hy.prior Prior for the heterogeneity parameter. Supports uniform, gamma, and half normal for normal. It should be a list of length 3, where first element should be the distribution (one of dunif, dgamma, dhnorm, dwish) and the next two are the parameters associated with the distribution. For example, list("dunif", 0, 5) give uniform prior with lower bound 0 and upper bound 5 for the heterogeneity parameter.
 #' @param dic This is an indicator for whether user wants to calculate DIC. Model stores less information if you set it to FALSE.
 #' @return Creates list of variables that are used to run the model using \code{\link{ume.network.run}}
+#' \item{r}{\code{Outcomes} made into an array that is suitable for use in rjags code. For multinomial, it has 3 dimensions: number of study by max number of arms in studies by number of categories.}
+#' \item{t}{\code{Treat} transformed into a matrix which has dimensions number of study by max number of arms in studies}
+#' \item{nstudy}{Number of study}
+#' \item{na}{Number of arms for each study}
+#' \item{ntreat}{Number of treatment}
+#' \item{b.id}{Indicator in sequence of all treatments for which treatment is base treatment in Study}
+#' \item{code}{Rjags model file code that is generated using information provided by the user. To view model file inside R in a nice format, use \code{cat(network$code).}}
 #' @examples
 #' network <- with(thrombolytic, {
 #'  ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial")
 #' })
 #' network
-#' @references S. Dias, N.J. Welton, A.J. Sutton, D.M. Caldwell, G. Lu, and A.E. Ades (2013), \emph{Evidence synthesis for decision making 4: inconsistency in networks of evidence based on randomized controlled trials}, Medical Decision Making 33(5):641-656. [\url{https://doi.org/10.1177/0272989X12455847}]
+#' @references S. Dias, N.J. Welton, A.J. Sutton, D.M. Caldwell, G. Lu, and A.E. Ades (2013), \emph{Evidence synthesis for decision making 4: inconsistency in networks of evidence based on randomized controlled trials}, Medical Decision Making 33(5):641-656. \doi{10.1177/0272989X12455847}
 #' @export
 
-ume.network.data <- function(Outcomes, Study, Treat, N = NULL, SE = NULL, response = NULL, type = "random",
+ume.network.data <- function(Outcomes, Study, Treat, N = NULL, SE = NULL, response = NULL, Treat.order = NULL, type = "random",
                              mean.mu = NULL, prec.mu = NULL, mean.d = NULL, prec.d = NULL, hy.prior = list("dunif", 0, 5), dic = TRUE){
+  
+  if(!is.null(Treat.order)){
+    Treat <- relabel.vec(Treat, Treat.order)
+    names(Treat.order) <- 1:length(Treat.order)  
+  }
+  
+  if(!is.numeric(Treat)){
+    stop("Treatment has to be a numeric sequence or Treat.order has to be specified; also, for each study, base treatment has be treatment with the lowest value")
+  }
   
   if(missing(Study) || missing(Treat) || missing(Outcomes)){
     stop("Study, Treat, and Outcomes have to be all specified")
@@ -106,7 +123,7 @@ ume.network.data <- function(Outcomes, Study, Treat, N = NULL, SE = NULL, respon
     }
   }
   
-  network <- list(Outcomes = Outcomes, Study = Study, Treat = Treat, r = r, t = t, type = type, rank.preference = NULL, nstudy = nstudy, na = na, ntreat = ntreat, b.id = b.id, response = response, hy.prior = hy.prior, mean.d = mean.d, prec.d = prec.d, mean.mu = mean.mu, prec.mu = prec.mu, dic = dic)
+  network <- list(Outcomes = Outcomes, Study = Study, Treat = Treat, Treat.order = Treat.order, r = r, t = t, type = type, nstudy = nstudy, na = na, ntreat = ntreat, b.id = b.id, response = response, hy.prior = hy.prior, mean.d = mean.d, prec.d = prec.d, mean.mu = mean.mu, prec.mu = prec.mu, dic = dic)
   
   if(response == "binomial" || response == "multinomial"){
     network$N = N
@@ -219,13 +236,9 @@ ume.normal.rjags <- function(network){
                    "\n\t\tmu[i] ~ dnorm(mean.mu, prec.mu)",
                    "\n\t\tfor(k in 1:na[i]) {",
                    "\n\t\t\ttau[i,k] <- 1/pow(se[i,k],2)",
-                   "\n\t\t\tr[i,k] ~ dnorm(theta[i,k], tau[i,k])")
-    
-    if(type == "fixed"){
-      code <- paste0(code, "\n\t\t\ttheta[i,k] <- mu[i] + d[t[i,1], t[i,k]]")
-    } else if(type == "random"){
-      code <- paste0(code, "\n\t\t\ttheta[i,k] <- mu[i] + delta[i,k]")
-    }  
+                   "\n\t\t\tr[i,k] ~ dnorm(theta[i,k], tau[i,k])",
+                   "\n\t\t\ttheta[i,k] <- mu[i] + delta[i,k]"
+                   )
     
     code <- paste0(code,   
                    "\n\t\t\tdev[i,k] <- (r[i,k]-theta[i,k])*(r[i,k]-theta[i,k])*tau[i,k]",
@@ -235,6 +248,10 @@ ume.normal.rjags <- function(network){
     if(type == "random"){
       code <- paste0(code, "\n\t\tfor (k in 2:na[i]) {",
                      "\n\t\t\tdelta[i,k] ~ dnorm(d[t[i,1],t[i,k]], prec)",
+                     "\n\t\t}")
+    } else if(type == "fixed"){
+      code <- paste0(code, "\n\t\tfor (k in 2:na[i]) {",
+                     "\n\t\t\tdelta[i,k] <- d[t[i,1],t[i,k]]",
                      "\n\t\t}")
     }
     
@@ -271,13 +288,9 @@ ume.binomial.rjags <- function(network){
                    "\n\t\tdelta[i,1] <- 0",
                    "\n\t\tmu[i] ~ dnorm(mean.mu,prec.mu)",
                    "\n\t\tfor(k in 1:na[i]) {",
-                   "\n\t\t\tr[i,k] ~ dbin(p[i,k], n[i,k])")
-    
-    if(type == "fixed"){
-      code <- paste0(code, "\n\t\t\tlogit(p[i,k]) <- mu[i] + d[t[i,1], t[i,k]]")
-    } else if(type == "random"){
-      code <- paste0(code, "\n\t\t\tlogit(p[i,k]) <- mu[i] + delta[i,k]")
-    }
+                   "\n\t\t\tr[i,k] ~ dbin(p[i,k], n[i,k])",
+                   "\n\t\t\tlogit(p[i,k]) <- mu[i] + delta[i,k]"
+                   )
     
     code <- paste0(code,          
                    "\n\t\t\trhat[i,k] <- p[i,k] * n[i,k]",
@@ -289,6 +302,10 @@ ume.binomial.rjags <- function(network){
     if(type == "random"){
       code <- paste0(code, "\n\t\tfor (k in 2:na[i]) {",
                      "\n\t\t\tdelta[i,k] ~ dnorm(d[t[i,1],t[i,k]], prec)",
+                     "\n\t\t}")
+    } else if(type == "fixed"){
+      code <- paste0(code, "\n\t\tfor (k in 2:na[i]) {",
+                     "\n\t\t\tdelta[i,k] <- d[t[i,1],t[i,k]]",
                      "\n\t\t}")
     }
     
@@ -360,7 +377,6 @@ ume.hy.prior.rjags <- function(hy.prior, ncat){
 #' \item{samples}{MCMC samples stored using jags. The returned samples have the form of mcmc.list and can be directly applied to coda functions}
 #' \item{max.gelman}{Maximum Gelman and Rubin's convergence diagnostic calculated for the final sample}
 #' \item{deviance}{Contains deviance statistics such as pD (effective number of parameters) and DIC (Deviance Information Criterion)}
-#' \item{rank.tx}{Rank probability calculated for each treatments. \code{rank.preference} parameter in \code{\link{ume.network.data}} is used to define whether higher or lower value is preferred. The numbers are probabilities that a given treatment has been in certain rank in the sequence.}
 #' @examples
 #' network <- with(thrombolytic, {
 #'  ume.network.data(Outcomes, Study, Treat, N = N, response = "binomial")
@@ -405,7 +421,7 @@ ume.network.run <- function(network, inits = NULL, n.chains = 3, max.run = 10000
     
     if(type == "random"){
       pars.save <- c(pars.save, "delta")
-      if(response %in% c("normal", "binoimal")){
+      if(response %in% c("normal", "binomial")){
         pars.save <- c(pars.save, "sd")
       } else if (response == "multinomial"){
         pars.save <- c(pars.save, "sigma")
@@ -599,7 +615,7 @@ ume.make.inits <- function(network, n.chains, delta, mu, se.mu){
         design.mat[j+rows[i],paste0("Treat", base.tx[i], nonbase.tx[j])] <- 1
       }
     }
-    
+  
     fit <- summary(lm(y ~ design.mat - 1))
     d <- se.d <- rep(NA, ntreat*(ntreat-1)/2)
     if(length(coef(fit)[,1]) == length(d)){ #check if there is any NA in the estimated fit

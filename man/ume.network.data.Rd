@@ -11,6 +11,7 @@ ume.network.data(
   N = NULL,
   SE = NULL,
   response = NULL,
+  Treat.order = NULL,
   type = "random",
   mean.mu = NULL,
   prec.mu = NULL,
@@ -33,6 +34,8 @@ ume.network.data(
 
 \item{response}{Specification of the outcomes type. Must specify one of the following: "normal", "binomial", or "multinomial".}
 
+\item{Treat.order}{Treatment order which determines how treatments are compared. The first treatment that is specified is considered to be the baseline treatment. Default order is alphabetical. If the treatments are coded 1, 2, etc, then the treatment with a value of 1 would be assigned as a baseline treatment.}
+
 \item{type}{Type of model fitted: either "random" for random effects model or "fixed" for fixed effects model. Default is "random".}
 
 \item{mean.mu}{Prior mean for the study effect (baseline risk)}
@@ -49,6 +52,13 @@ ume.network.data(
 }
 \value{
 Creates list of variables that are used to run the model using \code{\link{ume.network.run}}
+\item{r}{\code{Outcomes} made into an array that is suitable for use in rjags code. For multinomial, it has 3 dimensions: number of study by max number of arms in studies by number of categories.}
+\item{t}{\code{Treat} transformed into a matrix which has dimensions number of study by max number of arms in studies}
+\item{nstudy}{Number of study}
+\item{na}{Number of arms for each study}
+\item{ntreat}{Number of treatment}
+\item{b.id}{Indicator in sequence of all treatments for which treatment is base treatment in Study}
+\item{code}{Rjags model file code that is generated using information provided by the user. To view model file inside R in a nice format, use \code{cat(network$code).}}
 }
 \description{
 This is similar to the function \code{\link{network.data}}, except this is used for the unrelated mean effects model.
@@ -60,5 +70,5 @@ network <- with(thrombolytic, {
 network
 }
 \references{
-S. Dias, N.J. Welton, A.J. Sutton, D.M. Caldwell, G. Lu, and A.E. Ades (2013), \emph{Evidence synthesis for decision making 4: inconsistency in networks of evidence based on randomized controlled trials}, Medical Decision Making 33(5):641-656. [\url{https://doi.org/10.1177/0272989X12455847}]
+S. Dias, N.J. Welton, A.J. Sutton, D.M. Caldwell, G. Lu, and A.E. Ades (2013), \emph{Evidence synthesis for decision making 4: inconsistency in networks of evidence based on randomized controlled trials}, Medical Decision Making 33(5):641-656. \doi{10.1177/0272989X12455847}
 }

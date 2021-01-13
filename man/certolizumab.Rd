@@ -4,7 +4,9 @@
 \name{certolizumab}
 \alias{certolizumab}
 \title{Trials of certolizumab pegol (CZP) for the treatment of rheumatoid arthritis in patients}
-\format{A list of Outcomes, Treat, Study, N, covariate, and Treat.order}
+\format{
+A list of Outcomes, Treat, Study, N, covariate, and Treat.order
+}
 \usage{
 certolizumab
 }
@@ -13,6 +15,6 @@ A dataset of 12 trials for investigating CZP for the treatment for those who had
 Data provides the number of patients who have improved and there are 6 different treatments with placebo. Mean disease duration (years) is provided as a covariate.
 }
 \references{
-S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013b), \emph{Heterogeneity-Subgroups, Meta-Regression, Bias, and Bias-Adjustment}, Medical Decision Making 33(5):618-640. [\url{https://doi.org/10.1177/0272989X13485157}]
+S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013b), \emph{Heterogeneity-Subgroups, Meta-Regression, Bias, and Bias-Adjustment}, Medical Decision Making 33(5):618-640. \doi{10.1177/0272989X13485157}
 }
 \keyword{datasets}

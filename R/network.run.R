@@ -9,7 +9,7 @@
 #' @param max.run Maximum number of iterations that user is willing to run. If the algorithm is not converging, it will run up to \code{max.run} iterations before printing a message that it did not converge
 #' @param setsize Number of iterations that are run between convergence checks. If the algorithm converges fast, user wouldn't need a big setsize. The number that is printed between each convergence checks is the gelman-rubin diagnostics and we would want that to be below the conv.limit the user specifies.
 #' @param n.run Final number of iterations that the user wants to store. If after the algorithm converges, user wants less number of iterations, we thin the sequence. If the user wants more iterations, we run extra iterations to reach the specified number of runs
-#' @param conv.limit Convergence limit for Gelman and Rubin's convergence diagnostic. Point estimate is used (instead of 95 percent C.I.) to test convergence of parameters for study effect (eta), relative effect (d), and heterogeneity (log variance (logvar)).
+#' @param conv.limit Convergence limit for Gelman and Rubin's convergence diagnostic. Point estimate is used (instead of 95 percent C.I.) to test convergence of parameters for study-specific baselines (eta), average treatment effect (d), between-study heterogeneity (log variance (logvar)), and regression parameters when covariates (beta) or baseline risk (b_bl).
 #' @param extra.pars.save Parameters that user wants to save besides the default parameters saved. See code using \code{cat(network$code)} to see which parameters can be saved.
 #' @return
 #' \item{data_rjags}{Data that is put into rjags function \code{\link{jags.model}}}
@@ -115,28 +115,47 @@ network.run <- function(network, inits = NULL, RNG.inits = NULL, n.chains = 3, m
     
     if(baseline != "none"){
       pars.save <- c(pars.save, "b_bl")
-      if(baseline %in% c("common", "exchangeable")){
-        pars.save <- c(pars.save, "B")
-      }
       if(baseline == "exchangeable"){
         if(response == "multinomial"){
           pars.save <- c(pars.save, "sigmaB")
-        } else{
+        } else if (response %in% c("binomial", "normal")){
           pars.save <- c(pars.save, "sdB")  
         }
       }
     }
+    
+    if(baseline.risk == "exchangeable"){
+      if(response == "multinomial"){
+        pars.save <- c(pars.save, "E", "sigmaE")  
+      } else if (response %in% c("binomial", "normal")){
+        pars.save <- c(pars.save, "E", "sdE")
+      }
+      
+    }
+    
     if(!is.null(covariate)){
       for(i in seq(dim(covariate)[2])){
         pars.save = c(pars.save, paste("beta",i,sep = ""))
+      }
+      
+      if(covariate.model == "exchangeable"){
+        if(response == "multinomial"){
+          for(i in seq(dim(covariate)[2])){
+            pars.save = c(pars.save, paste("C",i,sep = ""))
+            pars.save = c(pars.save, paste("sigmaC",i,sep = ""))
+          }
+        } else if (response %in% c("binomial", "normal")){
+          for(i in seq(dim(covariate)[2])){
+            pars.save = c(pars.save, paste("C",i,sep = ""))
+            pars.save = c(pars.save, paste("sdC",i,sep = ""))
+          }
+        }
       }
     }
     pars.save <- unique(pars.save)
     
     if(is.null(inits)){
-      if(!any(is.na(network$data))){
-        inits <- network.inits(network, n.chains)
-      }
+      inits <- network.inits(network, n.chains)
     }
     
     if(is.null(RNG.inits)){
@@ -146,7 +165,11 @@ network.run <- function(network, inits = NULL, RNG.inits = NULL, n.chains = 3, m
       }
     }
     
-    inits <- mapply(c, inits, RNG.inits, SIMPLIFY = FALSE)
+    if(!is.null(inits)){
+      inits <- mapply(c, inits, RNG.inits, SIMPLIFY = FALSE)  
+    } else {
+      inits <- RNG.inits
+    }
     
     samples <- jags.fit(network, data, pars.save, inits, n.chains, max.run, setsize, n.run, conv.limit)
     
@@ -176,6 +199,7 @@ jags.fit <- function(network, data, pars.save, inits, n.chains, max.run, setsize
     }
   }
   
+  # conv.save are the variables that are used to check convergence
   if(class(network) == "network.data"){
     
     conv.save <- if(network$response == "multinomial"){
@@ -186,12 +210,20 @@ jags.fit <- function(network, data, pars.save, inits, n.chains, max.run, setsize
     if(network$type == "fixed"){
       conv.save <- conv.save[!conv.save %in% c("logvar", "sigma_transformed")]
     }  
+    if(network$baseline != "none"){
+      conv.save <- c(conv.save, "b_bl")
+    }
+    
+    if(!is.null(network$covariate)){
+      for(i in seq(dim(network$covariate)[2])){
+        conv.save = c(conv.save, paste("beta",i,sep = ""))
+      }
+    }
   } else if(class(network) == "contrast.network.data" || class(network) == "ume.network.data"){
     conv.save <- pars.save
   } else if(class(network) == "nodesplit.network.data"){
     conv.save <- c("d", "sd", "diff")
   }
-  
   
   samples <- rjags::coda.samples(model = mod, variable.names = pars.save, n.iter = setsize)
   varnames <- dimnames(samples[[1]])[[2]]
@@ -220,7 +252,7 @@ jags.fit <- function(network, data, pars.save, inits, n.chains, max.run, setsize
   end <- mcpar(samples[[1]])[2]
   mid <- (end + start-1)/2
   burnin <- ceiling(end - mid)
-  samples <- window(samples, mid+1, end, 1) #keep the last half of the converged sequence
+  samples <- window(samples, mid+1, end, 1) #keep the last half of the converged sequence as per Gelman and Rubin 1992
   samples <- new.mcmc(samples)
   
   n.thin <- 1
@@ -289,9 +321,3 @@ find.max.gelman <- function(samples, index){
   max(gelman.diag(samples2, multivariate = FALSE)$psrf[,1]) #look at point estimate instead of 95% C.I.
 }
 
-find.max.gelman.variable <- function(samples, index){
-  samples2 <- lapply(samples, function(x){ x[,index]})
-  samples2 <- lapply(samples2, function(x) { x[,colSums(abs(x)) != 0] })
-  
-  names(which.max(gelman.diag(samples2, multivariate = FALSE)$psrf[,1])) # find the biggest
-}

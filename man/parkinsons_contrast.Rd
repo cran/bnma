@@ -4,7 +4,9 @@
 \name{parkinsons_contrast}
 \alias{parkinsons_contrast}
 \title{Dopamine agonists as adjunct therapy in Parkinson's disease}
-\format{A list of Outcomes, Treat, SE, na, and V}
+\format{
+A list of Outcomes, Treat, SE, na, and V
+}
 \usage{
 parkinsons_contrast
 }
@@ -14,6 +16,6 @@ A contrast level (i.e. treatment difference) dataset of 7 studies investigating 
 There is placebo, coded as 1, and four active drugs coded 2 to 5.
 }
 \references{
-S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013a), \emph{A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials}, Medical Decision Making 33(5):607-617. [\url{https://doi.org/10.1177/0272989X12458724}]
+S. Dias, A.J. Sutton, A.E. Ades, and N.J. Welton (2013a), \emph{A Generalized Linear Modeling Framework for Pairwise and Network Meta-analysis of Randomized Controlled Trials}, Medical Decision Making 33(5):607-617. \doi{10.1177/0272989X12458724}
 }
 \keyword{datasets}
