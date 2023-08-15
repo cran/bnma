@@ -1,3 +1,7 @@
+# bnma 1.5.1
+
+* Modified contrast.network.run to avoid error
+
 # bnma 1.5.0
 
 * When calculating treatment effect in the natural scale (i.e. absolute treatment effect coded T in JAGS code), added option to specify covariate/baseline risk that treatment effect should be calculated at.
