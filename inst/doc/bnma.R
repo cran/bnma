@@ -36,7 +36,7 @@ network <- with(smoking, network.data(Outcomes = Outcomes, Study = Study, Treat 
 ## -----------------------------------------------------------------------------
 result <- network.run(network, n.run = 30000)
 
-## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
+## ----fig.height=10, fig.width=10, out.height=600, out.width=600---------------
 network.forest.plot(result, label.margin = 15)
 # relative.effects.table(result)
 # draw.network.graph(network)
@@ -59,11 +59,11 @@ network <- with(statins, network.data(Outcomes, Study, Treat, N=N, response = "b
 result <- network.run(network)
 summary(result)
 
-## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
+## ----fig.height=10, fig.width=10, out.height=600, out.width=600---------------
 network.covariate.plot(result, base.treatment = "Placebo", comparison.treatment = "Statin")
 
 ## -----------------------------------------------------------------------------
-network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", Treat.order = Treat.order, baseline = "common", baseline.risk = "exchangeable"))
+network <- with(certolizumab, network.data(Outcomes = Outcomes, Treat = Treat, Study = Study, N = N, response = "binomial", Treat.order = Treat.order, baseline = "common", baseline.risk = "independent", prec.Eta = 0.1))
 result <- network.run(network)
 summary(result)
 
@@ -81,7 +81,7 @@ network1 <- with(smoking, {
 })
 result1 <- network.run(network1)
 
-## ---- fig.height=10, fig.width=10, out.height=600, out.width=600--------------
+## ----fig.height=10, fig.width=10, out.height=600, out.width=600---------------
 network.inconsistency.plot(result1, result2)
 
 ## -----------------------------------------------------------------------------

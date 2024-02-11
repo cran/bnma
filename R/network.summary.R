@@ -819,7 +819,7 @@ network.leverage.plot <- function(result, per.study = FALSE){
 #' ########### certolizumab (with covariate)
 #' network <- with(certolizumab, {
 #'  network.data(Outcomes, Study, Treat, N=N, response="binomial", Treat.order,
-#'  covariate = covariate, hy.prior = list("dhnorm", 0, 9.77))
+#'  covariate = covariate, covariate.type = "continuous", hy.prior = list("dhnorm", 0, 9.77))
 #' })
 #' \donttest{
 #' result <- network.run(network)
@@ -830,7 +830,7 @@ network.leverage.plot <- function(result, per.study = FALSE){
 
 network.covariate.plot <- function(result, base.treatment = NULL, comparison.treatment= NULL, base.category = NULL, comparison.category = NULL, covariate.name = NULL){
 
-  if(is.null(network$covariate)){
+  if(is.null(result$network$covariate)){
     stop("need to provide covariate information to make this plot")
   }
   if(result$network$response != "multinomial"){
@@ -931,7 +931,7 @@ variance.tx.effects = function(result)
 #' @examples
 #' network <- with(certolizumab, {
 #'  network.data(Outcomes, Study, Treat, N=N, response="binomial", Treat.order,
-#'  covariate = covariate, hy.prior = list("dhnorm", 0, 9.77))
+#'  covariate = covariate, covariate.type = "continuous", hy.prior = list("dhnorm", 0, 9.77))
 #' })
 #' \donttest{
 #' result <- network.run(network)
@@ -998,11 +998,17 @@ network.forest.plot <- function(result, level = 0.95, ticks.position = NULL, lab
       ticks <- ticks.position
     }
 
+    if(result$network$response %in% c("binomial", "multinomial")){
+      yintercept <- 1
+    } else if(result$network$response == "normal"){
+      yintercept <- 0  
+    }
+    
     p <- ggplot(odds, aes(y = OR, x = name)) +
       geom_point() +
       geom_errorbar(aes(ymin = lower, ymax = upper), width = .2) +
       scale_x_discrete(limits = name) +
-      geom_hline(yintercept = 1, linetype = 2) +
+      geom_hline(yintercept = yintercept, linetype = 2) +
       coord_flip() +
       theme_bw() +
       theme(plot.margin = unit(c(1,label.margin,1,1), "lines"))
